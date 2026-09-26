@@ -436,7 +436,6 @@ void Handshake::processHandshakeResponse_resPQ(TLObject *message, int64_t messag
                                                   "-----END RSA PUBLIC KEY-----");
                     serverPublicKeysFingerprints.push_back(0xd09d1d85de64fd85);
                 }
-            }
 
             size_t count2 = serverPublicKeysFingerprints.size();
             for (uint32_t a = 0; a < count1; a++) {
