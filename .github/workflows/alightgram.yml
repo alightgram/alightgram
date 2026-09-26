@@ -1,0 +1,65 @@
+name: AlightGram build
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Free up disk space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up NDK r27c
+        uses: nttld/setup-ndk@v1.4.2
+        id: setup-ndk-r27c
+        with:
+          ndk-version: r27c
+          link-to-sdk: true
+
+      - name: Install NDK and accept licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.2.12479018" > /dev/null
+
+      - name: Build
+        run: |
+          ###
+          vars=gradle.properties
+          echo "DUMMY_CONST=0" >> $vars
+          echo "org.gradle.workers.max=2" >> $vars
+
+          sudo apt-get update
+          sudo apt-get install -y ninja-build meson nasm gperf pkg-config unzip
+          rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+
+          ./gradlew :TMessagesProj_App:assembleAfatRelease --stacktrace
+      - name: Collect APK
+        run: |
+          mkdir -p artifact
+          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/AlightGram.apk"
+          ls -la artifact/
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlightGram-APK
+          path: artifact/AlightGram.apk
+          if-no-files-found: error
