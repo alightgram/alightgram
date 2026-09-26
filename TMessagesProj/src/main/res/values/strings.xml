@@ -11487,12 +11487,12 @@
     <string name="EmailSignupInvalid">Please enter a valid email address.</string>
     <string name="EmailSignupPhoneFallback">Log in with phone number instead</string>
     <string name="EmailSignupPhoneFallbackTitle">Log in with phone number</string>
-    <string name="EmailSignupPhoneFallbackMessage">Even if you log in with a phone number, you'll still need to link an email to your account right after — this server cannot deliver a real SMS code.
+    <string name="EmailSignupPhoneFallbackMessage">Even if you log in with a phone number, you\'ll still need to link an email to your account right after — this server cannot deliver a real SMS code.
 
 Using your real phone number here is not recommended for privacy.
 
 Only use this if you already had an account on this server before email sign-up was turned on.</string>
     <string name="EmailSignupPhoneFallbackButton">Use phone number</string>
     <string name="PhoneNumberChangeNotSupportedTitle">Not supported</string>
-    <string name="PhoneNumberChangeNotSupported">This server uses email as your account's identity instead of a phone number, so changing the phone number isn't supported here.</string>
+    <string name="PhoneNumberChangeNotSupported">This server uses email as your account\'s identity instead of a phone number, so changing the phone number isn\'t supported here.</string>
 </resources>
