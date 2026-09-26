@@ -220,7 +220,6 @@ public class ServerSelectFragment extends BaseFragment {
             // Fragment is being destroyed; the pool is already shut down.
         }
     }
-    }
 
     private int pingTcp(String host, int port) {
         long t = System.currentTimeMillis();
