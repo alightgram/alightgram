@@ -45,7 +45,7 @@ jobs:
           ###
           vars=gradle.properties
           echo "DUMMY_CONST=0" >> $vars
-          echo "org.gradle.workers.max=2" >> $vars
+          echo "org.gradle.workers.max=1" >> $vars
 
           sudo apt-get update
           sudo apt-get install -y ninja-build meson nasm gperf pkg-config unzip
