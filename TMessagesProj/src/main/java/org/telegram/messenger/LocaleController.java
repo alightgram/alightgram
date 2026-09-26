@@ -1524,13 +1524,9 @@ public class LocaleController {
     }
 
     public static String getServerString(String key) {
-        // OwpenGram/AlightGram: a server-supplied langpack override wins, and
-        // every server string passes through branding normalization.
-        String value = getInstance().localeValues.get(key);
-        if (value != null) {
-            return normalizeBranding(value);
-        }
-        value = getInstance().localizationExternal.getByResName(key);
+        // OwpenGram/AlightGram: every server string passes through branding
+        // normalization (server-supplied overrides arrive via the langpack).
+        String value = getInstance().localizationExternal.getByResName(key);
         if (value == null) {
             int resourceId = getLocalizedStringByName(key);
             if (resourceId != 0) {
