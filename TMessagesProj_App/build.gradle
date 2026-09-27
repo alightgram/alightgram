@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 repositories {
-    mavenCentral()
     google()
+    mavenCentral()
 }
 
 configurations {

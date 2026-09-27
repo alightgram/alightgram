@@ -38,6 +38,11 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.2.12479018" > /dev/null
 
+      - name: Resolve dependencies (fail fast)
+        run: |
+          echo "org.gradle.workers.max=1" >> gradle.properties
+          ./gradlew :TMessagesProj_App:dependencies --configuration afatReleaseRuntimeClasspath -q
+
       - name: Build
         run: |
           ###
