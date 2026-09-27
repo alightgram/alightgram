@@ -14,6 +14,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Cache Gradle and native build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            TMessagesProj/build
+            TMessagesProj_App/build
+            TMessagesProj/.cxx
+          key: virusgram-build-${{ github.sha }}
+          restore-keys: |
+            virusgram-build-
+
       - name: Free up disk space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
