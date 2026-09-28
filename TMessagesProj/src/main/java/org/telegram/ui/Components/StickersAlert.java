@@ -1331,9 +1331,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
         String stickersUrl;
         if (stickerSet.set != null && stickerSet.set.emojis) {
-            stickersUrl = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/addemoji/" + stickerSet.set.short_name;
+            stickersUrl = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/addemoji/" + stickerSet.set.short_name;
         } else {
-            stickersUrl = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/addstickers/" + stickerSet.set.short_name;
+            stickersUrl = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/addstickers/" + stickerSet.set.short_name;
         }
         if (id == 1) {
             Context context = parentActivity;

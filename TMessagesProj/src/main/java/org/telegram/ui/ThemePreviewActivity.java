@@ -883,7 +883,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
                     if (currentWallpaper instanceof TLRPC.TL_wallPaper) {
                         TLRPC.TL_wallPaper wallPaper = (TLRPC.TL_wallPaper) currentWallpaper;
-                        link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + wallPaper.slug;
+                        link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/bg/" + wallPaper.slug;
                         if (modes.length() > 0) {
                             link += "?mode=" + modes.toString();
                         }
@@ -2085,7 +2085,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                                         MessagesController.getInstance(currentAccount).saveThemeToServer(accent.parentTheme, accent);
                                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, accent.parentTheme, accent);
                                     } else {
-                                        String link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/addtheme/" + accent.info.slug;
+                                        String link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/addtheme/" + accent.info.slug;
                                         showDialog(new ShareAlert(getParentActivity(), null, link, false, link, false));
                                     }
                                 } else {

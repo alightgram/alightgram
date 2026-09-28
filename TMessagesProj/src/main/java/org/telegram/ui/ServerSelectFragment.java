@@ -95,6 +95,11 @@ public class ServerSelectFragment extends BaseFragment {
         this(-1, autoJoin);
     }
 
+    /**
+     * Full form: log into {@code loginAccount} and, with {@code autoJoin},
+     * silently connect to the built-in VirusGram server without showing
+     * the picker (used by both first launch and add-account flows).
+     */
     public ServerSelectFragment(int loginAccount, boolean autoJoin) {
         this.loginAccount = loginAccount;
         this.autoJoin = autoJoin;
@@ -117,24 +122,35 @@ public class ServerSelectFragment extends BaseFragment {
     @Override
     public boolean onFragmentCreate() {
         reloadServers();
-        pingAll();
+        // The list is invisible in the auto-join flow; pinging every server
+        // (including Telegram) would just burn sockets before the login screen.
+        if (!autoJoin) {
+            pingAll();
+        }
         return true;
     }
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(org.telegram.messenger.R.drawable.ic_ab_back);
-        actionBar.setTitle("VirusGram");
-        actionBar.setSubtitle("Pick where to sign in");
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) finishFragment();
-            }
-        });
+        if (autoJoin) {
+            // Invisible hop: while the built-in server connects (a couple of
+            // seconds) the server picker must not flash on screen. The intro
+            // stays visible underneath and only the connection spinner shows.
+            actionBar.setAddToContainer(false);
+        } else {
+            actionBar.setBackButtonImage(org.telegram.messenger.R.drawable.ic_ab_back);
+            actionBar.setTitle("VirusGram");
+            actionBar.setSubtitle("Pick where to sign in");
+            actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+                @Override
+                public void onItemClick(int id) {
+                    if (id == -1) finishFragment();
+                }
+            });
+        }
 
         FrameLayout frame = new FrameLayout(context);
-        frame.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        frame.setBackgroundColor(autoJoin ? 0 : Theme.getColor(Theme.key_windowBackgroundGray));
         fragmentView = frame;
 
         listView = new RecyclerListView(context);
@@ -144,6 +160,11 @@ public class ServerSelectFragment extends BaseFragment {
         listView.setOnItemClickListener((view, position) -> onRowClick(position));
         frame.addView(listView, LayoutHelper.createFrame(
                 LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        if (autoJoin) {
+            // Server cards draw their own opaque backgrounds; the whole list must
+            // stay hidden so nothing flashes over the intro screen.
+            listView.setVisibility(View.GONE);
+        }
 
         if (autoJoin) {
             uiHandler.post(() -> {
@@ -186,14 +207,19 @@ public class ServerSelectFragment extends BaseFragment {
         final int port    = s.port;
         pingCache.put(id, PING_CHECKING);
         updateRow(id);
-        pingPool.submit(() -> {
-            int ms = pingTcp(host, port);
-            uiHandler.post(() -> {
-                if (destroyed) return;
-                pingCache.put(id, ms);
-                updateRow(id);
+        try {
+            pingPool.submit(() -> {
+                int ms = pingTcp(host, port);
+                uiHandler.post(() -> {
+                    if (destroyed) return;
+                    pingCache.put(id, ms);
+                    updateRow(id);
+                });
             });
-        });
+        } catch (java.util.concurrent.RejectedExecutionException ignore) {
+            // Fragment is being destroyed; the pool is already shut down.
+        }
+    }
     }
 
     private int pingTcp(String host, int port) {
@@ -271,25 +297,36 @@ public class ServerSelectFragment extends BaseFragment {
                     LimitReachedBottomSheet.TYPE_ACCOUNTS, currentAccount, null));
             return;
         }
+        // Auto-join skips the pre-check entirely: apply the server right away and
+        // let waitForConnection show progress; its failure dialog offers a retry
+        // and a manual-picker escape hatch.
+        if (autoJoin) {
+            proceedJoin(server);
+            return;
+        }
         // Online check first, exactly like desktop CheckServerOnline before joining.
-        pingPool.submit(() -> {
-            int ms = pingTcp(server.host, server.port);
-            uiHandler.post(() -> {
-                if (destroyed) return;
-                pingCache.put(server.id, ms);
-                updateRow(server.id);
-                if (ms >= 0) {
-                    proceedJoin(server);
-                } else {
-                    AlertDialog.Builder b = new AlertDialog.Builder(getParentActivity());
-                    b.setTitle("Server unreachable");
-                    b.setMessage("Couldn't reach " + server.name + " (" + server.host + ":" + server.port + "). Try to connect anyway?");
-                    b.setPositiveButton("Connect", (d, w) -> proceedJoin(server));
-                    b.setNegativeButton("Cancel", null);
-                    showDialog(b.create());
-                }
+        try {
+            pingPool.submit(() -> {
+                int ms = pingTcp(server.host, server.port);
+                uiHandler.post(() -> {
+                    if (destroyed) return;
+                    pingCache.put(server.id, ms);
+                    updateRow(server.id);
+                    if (ms >= 0) {
+                        proceedJoin(server);
+                    } else if (getParentActivity() != null) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(getParentActivity());
+                        b.setTitle("Server unreachable");
+                        b.setMessage("Couldn't reach " + server.name + " (" + OwpengramServers.displayEndpoint(server) + "). Try to connect anyway?");
+                        b.setPositiveButton("Connect", (d, w) -> proceedJoin(server));
+                        b.setNegativeButton("Cancel", null);
+                        showDialog(b.create());
+                    }
+                });
             });
-        });
+        } catch (java.util.concurrent.RejectedExecutionException ignore) {
+            // Fragment is being destroyed; the pool is already shut down.
+        }
     }
 
     private void proceedJoin(OwpengramServer server) {
@@ -369,6 +406,12 @@ public class ServerSelectFragment extends BaseFragment {
         b.setMessage("Couldn't establish a connection to " + server.name + ". You can continue to the login screen and keep trying, or go back.");
         b.setPositiveButton("Continue", (d, w) -> goToLogin(server, false));
         b.setNegativeButton("Back", null);
+        if (autoJoin) {
+            // Escape hatch: without a visible picker there'd be no way to reach a
+            // custom server (or retry after a broken built-in endpoint).
+            b.setNeutralButton("Choose server", (d, w) ->
+                    presentFragment(new ServerSelectFragment(loginAccount, false)));
+        }
         showDialog(b.create());
     }
 
@@ -629,7 +672,7 @@ public class ServerSelectFragment extends BaseFragment {
                     android.graphics.Shader.TileMode.CLAMP));
 
             nameTv.setText(server.name);
-            endpointTv.setText(server.host + ":" + server.port);
+            endpointTv.setText(OwpengramServers.displayEndpoint(server));
 
             stopPulse();
             int dotColor;

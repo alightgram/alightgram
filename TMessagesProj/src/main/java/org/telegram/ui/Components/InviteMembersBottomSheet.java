@@ -169,7 +169,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     TLRPC.ChatFull chatInfo = MessagesController.getInstance(currentAccount).getChatFull(chatId);
                     String link = null, username;
                     if (chat != null && !TextUtils.isEmpty(username = ChatObject.getPublicUsername(chat))) {
-                        link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username;
+                        link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username;
                     } else if (chatInfo != null &&  chatInfo.exported_invite != null) {
                         link = chatInfo.exported_invite.link;
                     } else {

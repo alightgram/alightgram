@@ -1082,7 +1082,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
                     final TLRPC.User bot = MessagesController.getInstance(currentAccount).getUser(botId);
                     if (bot == null) return;
                     final String username = UserObject.getPublicUsername(bot);
-                    final String link = "https://"+MessagesController.getInstance(currentAccount).linkPrefix+"/"+username+"?profile";
+                    final String link = "https://"+MessagesController.getInstance(currentAccount).getDisplayLinkPrefix()+"/"+username+"?profile";
                     new ShareAlert(getContext(), null, link, false, link, false, AndroidUtilities.computePerceivedBrightness(actionBarColor) > .721f ? null : new DarkThemeResourceProvider()).show();
                 }
             }

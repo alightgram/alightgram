@@ -896,7 +896,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             Theme.ThemeInfo themeInfo = (Theme.ThemeInfo) args[0];
             Theme.ThemeAccent accent = (Theme.ThemeAccent) args[1];
             if (themeInfo == sharingTheme && accent == sharingAccent) {
-                String link = "https://" + getMessagesController().linkPrefix + "/addtheme/" + (accent != null ? accent.info.slug : themeInfo.info.slug);
+                String link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/addtheme/" + (accent != null ? accent.info.slug : themeInfo.info.slug);
                 showDialog(new ShareAlert(getParentActivity(), null, link, false, link, false));
                 if (sharingProgressDialog != null) {
                     sharingProgressDialog.dismiss();
@@ -994,7 +994,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         getMessagesController().saveThemeToServer(accent.parentTheme, accent);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, accent.parentTheme, accent);
                     } else {
-                        String link = "https://" + getMessagesController().linkPrefix + "/addtheme/" + accent.info.slug;
+                        String link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/addtheme/" + accent.info.slug;
                         showDialog(new ShareAlert(getParentActivity(), null, link, false, link, false));
                     }
                 } else if (id == edit_theme) {
@@ -2130,7 +2130,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         getMessagesController().saveThemeToServer(themeInfo, null);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, themeInfo, null);
                     } else {
-                        String link = "https://" + getMessagesController().linkPrefix + "/addtheme/" + themeInfo.info.slug;
+                        String link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/addtheme/" + themeInfo.info.slug;
                         showDialog(new ShareAlert(getParentActivity(), null, link, false, link, false));
                     }
                 } else if (which == 1) {
@@ -2385,7 +2385,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                         getMessagesController().saveThemeToServer(accent.parentTheme, accent);
                                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShareTheme, accent.parentTheme, accent);
                                     } else {
-                                        String link = "https://" + getMessagesController().linkPrefix + "/addtheme/" + accent.info.slug;
+                                        String link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/addtheme/" + accent.info.slug;
                                         showDialog(new ShareAlert(getParentActivity(), null, link, false, link, false));
                                     }
                                 } else if (which == 2) {

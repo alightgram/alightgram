@@ -40,11 +40,17 @@ public class QRScanner {
 
     private final Utilities.Callback<Detected> listener;
     private Detected lastDetected;
-    private final String prefix;
+    // Own links are printed with the cosmetic display domain (virusgram.cc), but QR
+    // codes from older builds may still carry the raw endpoint host.
+    private final String[] prefixes;
 
     public QRScanner(Context context, Utilities.Callback<Detected> whenScanned) {
         this.listener = whenScanned;
-        this.prefix = MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix;
+        String rawPrefix = MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix;
+        String displayPrefix = MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix();
+        this.prefixes = rawPrefix.equals(displayPrefix)
+                ? new String[] { rawPrefix }
+                : new String[] { rawPrefix, displayPrefix };
         Utilities.globalQueue.postRunnable(() -> {
             detector.set(new BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build());
             attach(cameraView);
@@ -53,6 +59,15 @@ public class QRScanner {
 
     public Detected getDetected() {
         return lastDetected;
+    }
+
+    private boolean isOwnLink(String link) {
+        for (String prefix : prefixes) {
+            if (link.startsWith(prefix) || link.startsWith("https://" + prefix) || link.startsWith("http://" + prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private CameraView cameraView;
@@ -146,7 +161,7 @@ public class QRScanner {
             String link = code.rawValue;
             if (link == null) continue;
             link = link.trim();
-            if (!link.startsWith(prefix) && !link.startsWith("https://" + prefix) && !link.startsWith("http://" + prefix)) continue;
+            if (!isOwnLink(link)) continue;
 
             final PointF[] cornerPoints = new PointF[code.cornerPoints.length];
             for (int j = 0; j < code.cornerPoints.length; ++j) {

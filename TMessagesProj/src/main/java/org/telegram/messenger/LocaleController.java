@@ -1488,7 +1488,10 @@ public class LocaleController {
                 .replace("OwpenGram", "VirusGram")
                 .replace("OWPENGRAM", "VIRUSGRAM")
                 .replace("Owpengram", "VirusGram")
-                .replace("owpengram", "virusgram");
+                .replace("owpengram", "virusgram")
+                .replace("AlightGram", "VirusGram")
+                .replace("ALIGHTGRAM", "VIRUSGRAM")
+                .replace("alightgram", "virusgram");
     }
 
     public static String getServerString(String key) {

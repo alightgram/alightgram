@@ -897,7 +897,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     private String getLinkForSet(TLRPC.TL_messages_stickerSet stickerSet) {
-        return String.format(Locale.US, "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + (stickerSet.set.emojis ? "addemoji" : "addstickers") + "/%s", stickerSet.set.short_name);
+        return String.format(Locale.US, "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + (stickerSet.set.emojis ? "addemoji" : "addstickers") + "/%s", stickerSet.set.short_name);
     }
 
     private void processSelectionMenu(int which) {

@@ -2809,7 +2809,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(new PeerColorActivity(0).startOnProfile().setOnApplied(ProfileActivity.this));
                 } else if (id == copy_link_profile) {
                     TLRPC.User user = getMessagesController().getUser(userId);
-                    AndroidUtilities.addToClipboard(getMessagesController().linkPrefix + "/" + UserObject.getPublicUsername(user));
+                    AndroidUtilities.addToClipboard(getMessagesController().getDisplayLinkPrefix() + "/" + UserObject.getPublicUsername(user));
                 } else if (id == set_username) {
                     presentFragment(new ChangeUsernameActivity());
                 } else if (id == logout) {
@@ -7284,9 +7284,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 TLRPC.Chat chat = getMessagesController().getChat(chatId);
                 String link;
                 if (ChatObject.isPublic(chat)) {
-                    link = "https://" + getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(chat) + (topicId != 0 ? "/" + topicId : "");
+                    link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/" + ChatObject.getPublicUsername(chat) + (topicId != 0 ? "/" + topicId : "");
                 } else {
-                    link = "https://" + getMessagesController().linkPrefix + "/c/" + chat.id + (topicId != 0 ? "/" + topicId : "");
+                    link = "https://" + getMessagesController().getDisplayLinkPrefix() + "/c/" + chat.id + (topicId != 0 ? "/" + topicId : "");
                 }
                 ShareAlert shareAlert = new ShareAlert(getParentActivity(), null, link, false, link, false) {
                     @Override
@@ -11490,7 +11490,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible) {
                             TLRPC.TL_emojiStatusCollectible status = (TLRPC.TL_emojiStatusCollectible) user.emoji_status;
                             if (status != null) {
-                                Browser.openUrl(getContext(), "https://" + getMessagesController().linkPrefix + "/nft/" + status.slug);
+                                Browser.openUrl(getContext(), "https://" + getMessagesController().getDisplayLinkPrefix() + "/nft/" + status.slug);
                             }
                             return;
                         }
@@ -11766,7 +11766,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else if (chat.emoji_status instanceof TLRPC.TL_emojiStatusCollectible) {
                             final String slug = ((TLRPC.TL_emojiStatusCollectible) chat.emoji_status).slug;
                             nameTextView[a].setRightDrawableOnClick(v -> {
-                                Browser.openUrl(getContext(), "https://" + getMessagesController().linkPrefix + "/nft/" + slug);
+                                Browser.openUrl(getContext(), "https://" + getMessagesController().getDisplayLinkPrefix() + "/nft/" + slug);
                             });
                         }
                     }
@@ -14217,7 +14217,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         getConnectionsManager().bindRequestToGuid(reqId, getClassGuid());
                     } else {
                         setLoadingSpan(null);
-                        String urlFinal = getMessagesController().linkPrefix + "/" + usernameRaw;
+                        String urlFinal = getMessagesController().getDisplayLinkPrefix() + "/" + usernameRaw;
                         if (currentChat == null || !currentChat.noforwards) {
                             AndroidUtilities.addToClipboard(urlFinal);
                             undoView.showWithAction(0, UndoView.ACTION_USERNAME_COPIED, null);
@@ -14520,6 +14520,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                         }
                         if (freeAccount >= 0) {
+                            // Auto-connect to the built-in server, no picker shown.
                             f.presentFragment(new ServerSelectFragment(freeAccount, true));
                         }
                     }).withLink("tg://settings/edit/add-account"),
@@ -15764,7 +15765,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public String getLink(String username, int topicId) {
-        String link = getMessagesController().linkPrefix + "/" + username;
+        String link = getMessagesController().getDisplayLinkPrefix() + "/" + username;
         if (topicId != 0) {
             link += "/" + topicId;
         }
@@ -16463,7 +16464,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC.Chat channel = getMessagesController().getChat(userFull.personal_channel_id);
             if (channel != null && ChatObject.getPublicUsername(channel) != null) {
                 itemOptions.add(R.drawable.msg_copy, getString(R.string.ProfileChannelCopy), () -> {
-                    AndroidUtilities.addToClipboard("https://" + getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(channel));
+                    AndroidUtilities.addToClipboard("https://" + getMessagesController().getDisplayLinkPrefix() + "/" + ChatObject.getPublicUsername(channel));
                 });
             }
             itemOptions.add(R.drawable.msg_edit, getString(R.string.ProfileChannelChange), () -> {
@@ -16580,7 +16581,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             collectibleHint.show();
             final String slug = status.slug;
             collectibleHint.setOnClickListener(v -> {
-                Browser.openUrl(getContext(), "https://" + getMessagesController().linkPrefix + "/nft/" + slug);
+                Browser.openUrl(getContext(), "https://" + getMessagesController().getDisplayLinkPrefix() + "/nft/" + slug);
             });
             if (extraHeight < dp(82)) {
                 collectibleHintVisible = false;

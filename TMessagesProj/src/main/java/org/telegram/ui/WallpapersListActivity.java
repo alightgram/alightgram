@@ -380,13 +380,13 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
             }
             if (pattern != null) {
-                String link = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/bg/" + pattern.slug + "?intensity=" + (int) (intensity * 100) + "&bg_color=" + color1;
+                String link = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/bg/" + pattern.slug + "?intensity=" + (int) (intensity * 100) + "&bg_color=" + color1;
                 if (motion) {
                     link += "&mode=motion";
                 }
                 return link;
             } else {
-                return "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/bg/" + color1;
+                return "https://" + MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/bg/" + color1;
             }
         }
     }

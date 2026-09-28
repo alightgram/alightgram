@@ -475,7 +475,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             final MessageObject message = messages.get(0);
             final String username = DialogObject.getPublicUsername(MessagesController.getInstance(currentAccount).getUserOrChat(message.getDialogId()));
             if (!TextUtils.isEmpty(username)) {
-                linkToCopy[0] = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/" + message.getId();
+                linkToCopy[0] = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/" + message.getId();
                 if (messages.size() == 1 && message.hasValidGroupId()) {
                     linkToCopy[0] += "?single";
                 }

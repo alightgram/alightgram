@@ -550,7 +550,7 @@ public class PollItemMenu extends Dialog {
             if (messageObject.getDialogId() < 0 && task.option != null) {
                 final MessagesController messagesController = MessagesController.getInstance(messageObject.currentAccount);
                 final String username = DialogObject.getPublicUsername(messagesController.getUserOrChat(messageObject.getDialogId()));
-                final String link = "https://" + messagesController.linkPrefix + "/" + (TextUtils.isEmpty(username) ? "c/" + (-messageObject.getDialogId()) : username) + "/" + messageObject.getId() + "?option=" + new String(Base64.encode(task.option, Base64.URL_SAFE | Base64.NO_PADDING));
+                final String link = "https://" + messagesController.getDisplayLinkPrefix() + "/" + (TextUtils.isEmpty(username) ? "c/" + (-messageObject.getDialogId()) : username) + "/" + messageObject.getId() + "?option=" + new String(Base64.encode(task.option, Base64.URL_SAFE | Base64.NO_PADDING));
                 taskOptions.add(R.drawable.msg_link, getString(R.string.CopyLink), () -> {
                     AndroidUtilities.addToClipboard(link);
                     dismiss(true);

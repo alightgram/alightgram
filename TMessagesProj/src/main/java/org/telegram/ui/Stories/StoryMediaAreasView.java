@@ -264,7 +264,7 @@ public class StoryMediaAreasView extends FrameLayout implements View.OnClickList
                 return;
             } else if (selectedArea.mediaArea instanceof TL_stories.TL_mediaAreaStarGift) {
                 final String slug = ((TL_stories.TL_mediaAreaStarGift) selectedArea.mediaArea).slug;
-                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/nft/" + slug);
+                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/nft/" + slug);
                 selectedArea = null;
                 invalidate();
                 return;

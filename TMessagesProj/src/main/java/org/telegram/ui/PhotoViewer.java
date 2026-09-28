@@ -8617,7 +8617,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             MessageObject msg = messages.get(0);
             String username = ChatObject.getPublicUsername(MessagesController.getInstance(currentAccount).getChat(-msg.getDialogId()));
             if (!TextUtils.isEmpty(username)) {
-                link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/" + msg.getId();
+                link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/" + msg.getId();
             }
         }
         ShareAlert alert = new ShareAlert(parentActivity, parentChatActivity, messages, null, null, false, link, null, false, true, false, videoTimestamp, null) {

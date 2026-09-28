@@ -7098,7 +7098,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
             // "me.owpengram.org" for self-hosted accounts, "t.me" for real Telegram) -
             // must not be hardcoded to t.me, or self-hosted story links point at the
             // official Telegram domain instead of this server.
-            final String linkPrefix = MessagesController.getInstance(currentAccount).linkPrefix;
+            final String linkPrefix = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix();
             if (dialogId > 0) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
                 if (UserObject.getPublicUsername(user) == null) {

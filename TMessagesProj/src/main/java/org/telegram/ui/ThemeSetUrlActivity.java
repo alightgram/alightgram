@@ -242,7 +242,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         linearLayoutTypeContainer.addView(linkContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 23, 0, 23, 0));
 
         editText = new EditTextBoldCursor(context);
-        editText.setText(getMessagesController().linkPrefix + "/addtheme/");
+        editText.setText(getMessagesController().getDisplayLinkPrefix() + "/addtheme/");
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -299,7 +299,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     return;
                 }
                 if (linkField.length() > 0) {
-                    String url = "https://" + getMessagesController().linkPrefix + "/addtheme/" + linkField.getText();
+                    String url = "https://" + getMessagesController().getDisplayLinkPrefix() + "/addtheme/" + linkField.getText();
                     String text = LocaleController.formatString("ThemeHelpLink", R.string.ThemeHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);

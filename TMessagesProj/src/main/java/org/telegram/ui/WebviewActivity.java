@@ -122,7 +122,7 @@ public class WebviewActivity extends BaseFragment {
         currentGame = gameName;
         currentMessageObject = messageObject;
         short_param = startParam;
-        linkToCopy = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
+        linkToCopy = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
         type = TYPE_GAME;
     }
 
@@ -403,7 +403,7 @@ public class WebviewActivity extends BaseFragment {
             SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
+            editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).getDisplayLinkPrefix() + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
             editor.commit();
             Browser.openUrl(parentActivity, url, false);
             serializedData.cleanup();

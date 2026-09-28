@@ -109,21 +109,26 @@ public class ServerInfoFragment extends BaseFragment {
     private void pingServer() {
         pinging = true;
         updateStatus(-2); // checking
-        pingPool.submit(() -> {
-            long start = System.currentTimeMillis();
-            int ms;
-            try (Socket socket = new Socket()) {
-                socket.connect(new InetSocketAddress(server.host, server.port), 3000);
-                ms = (int) (System.currentTimeMillis() - start);
-            } catch (Exception e) {
-                ms = -1;
-            }
-            final int result = ms;
-            uiHandler.post(() -> {
-                pinging = false;
-                updateStatus(result);
+        try {
+            pingPool.submit(() -> {
+                long start = System.currentTimeMillis();
+                int ms;
+                try (Socket socket = new Socket()) {
+                    socket.connect(new InetSocketAddress(server.host, server.port), 3000);
+                    ms = (int) (System.currentTimeMillis() - start);
+                } catch (Exception e) {
+                    ms = -1;
+                }
+                final int result = ms;
+                uiHandler.post(() -> {
+                    pinging = false;
+                    updateStatus(result);
+                });
             });
-        });
+        } catch (java.util.concurrent.RejectedExecutionException ignore) {
+            // Fragment is being destroyed; the pool is already shut down.
+            pinging = false;
+        }
     }
 
     private void updateStatus(int ms) {
@@ -179,7 +184,7 @@ public class ServerInfoFragment extends BaseFragment {
 
         // Endpoint
         TextView epTv = new TextView(context);
-        epTv.setText(server.host + ":" + server.port);
+        epTv.setText(OwpengramServers.displayEndpoint(server));
         epTv.setTextSize(12);
         epTv.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         epTv.setGravity(Gravity.CENTER);

@@ -494,6 +494,7 @@ public class UserInfoActivity extends UniversalFragment implements NotificationC
             // enforced per-server (Telegram only) in ServerSelectFragment.
             int availableAccount = org.telegram.owpengram.OwpengramServers.firstFreeAccountSlot();
             if (availableAccount >= 0) {
+                // Auto-connect to the built-in server, no picker shown.
                 presentFragment(new ServerSelectFragment(availableAccount, true));
             } else {
                 showDialog(new LimitReachedBottomSheet(this, getContext(), TYPE_ACCOUNTS, currentAccount, null));

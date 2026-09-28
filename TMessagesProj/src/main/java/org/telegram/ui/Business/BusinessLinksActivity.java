@@ -341,7 +341,7 @@ public class BusinessLinksActivity extends UniversalFragment implements Notifica
         adapter.whiteSectionEnd();
 
         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-        String linkPrefix = MessagesController.getInstance(currentAccount).linkPrefix + "/";
+        String linkPrefix = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/";
         ArrayList<String> links = new ArrayList<>(2);
         String publicUsername = UserObject.getPublicUsername(user);
         if (publicUsername != null) {

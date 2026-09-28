@@ -18117,6 +18117,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         
         int value = currentMessageObject.getDiceValue();
         if ("\uD83C\uDFB0".equals(currentMessageObject.getDiceEmoji())) {
+            // The drawable may briefly be a plain RLottieDrawable (e.g. restored from a
+            // cached thumb); skip slot-machine wiring instead of crashing on the cast.
+            if (!(lottieDrawable instanceof SlotsDrawable)) {
+                return false;
+            }
             if (value >= 0 && value <= 64) {
                 ((SlotsDrawable) lottieDrawable).setDiceNumber(this, value, stickerSet, instant);
                 if (currentMessageObject.isOut()) {

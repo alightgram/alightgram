@@ -305,7 +305,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 collectionName = collectionName.substring(0, spaceIndex);
             }
             titleView[0].setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserStatusCollectibleDialogTitle, DialogObject.getShortName(user), collectionName), () -> {
-                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/nft/" + emojiStatusCollectible.slug);
+                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/nft/" + emojiStatusCollectible.slug);
             }));
             subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserStatusDialogSubtitle)));
         } else if (statusStickerSet != null) {

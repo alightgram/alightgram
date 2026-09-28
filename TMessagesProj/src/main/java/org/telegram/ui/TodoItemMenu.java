@@ -494,7 +494,7 @@ public class TodoItemMenu extends Dialog {
             if (messageObject.getDialogId() < 0) {
                 final MessagesController messagesController = MessagesController.getInstance(messageObject.currentAccount);
                 final String username = DialogObject.getPublicUsername(messagesController.getUserOrChat(messageObject.getDialogId()));
-                final String link = "https://" + messagesController.linkPrefix + "/" + (TextUtils.isEmpty(username) ? "c/" + (-messageObject.getDialogId()) : username) + "/" + messageObject.getId() + "?task=" + task.id;
+                final String link = "https://" + messagesController.getDisplayLinkPrefix() + "/" + (TextUtils.isEmpty(username) ? "c/" + (-messageObject.getDialogId()) : username) + "/" + messageObject.getId() + "?task=" + task.id;
                 taskOptions.add(R.drawable.msg_link, getString(R.string.CopyLink), () -> {
                     AndroidUtilities.addToClipboard(link);
                     dismiss(true);

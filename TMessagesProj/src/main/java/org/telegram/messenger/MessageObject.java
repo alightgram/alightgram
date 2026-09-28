@@ -2815,7 +2815,7 @@ public class MessageObject {
             message.peer_id = peer_id;
             message.date = event.date;
             if (!TextUtils.isEmpty(newLink)) {
-                message.message = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + newLink;
+                message.message = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + newLink;
             } else {
                 message.message = "";
             }
@@ -2830,7 +2830,7 @@ public class MessageObject {
                 message.media.webpage.display_url = "";
                 message.media.webpage.url = "";
                 message.media.webpage.site_name = getString(R.string.EventLogPreviousLink);
-                message.media.webpage.description = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + ((TLRPC.TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
+                message.media.webpage.description = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + ((TLRPC.TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
             } else {
                 message.media = new TLRPC.TL_messageMediaEmpty();
             }
@@ -5617,7 +5617,7 @@ public class MessageObject {
                         if (start >= 0 && bot != null) {
                             final String username = UserObject.getPublicUsername(bot);
                             if (username != null) {
-                                final String link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/" + botApp.short_name;
+                                final String link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/" + botApp.short_name;
                                 str.setSpan(new URLSpanNoUnderlineBold(link), start, start + botAppTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             }
                         }
@@ -5929,7 +5929,7 @@ public class MessageObject {
                         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(getMedia(messageOwner).user_id);
                         String link = null, username;
                         if (user != null && (username = UserObject.getPublicUsername(user)) != null) {
-                            link = MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/s/" + getMedia(messageOwner).id;
+                            link = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/s/" + getMedia(messageOwner).id;
                         }
                         if (link != null) {
                             messageText = new SpannableString(link);
@@ -6382,7 +6382,7 @@ public class MessageObject {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(media.user_id);
                 String link = null, username;
                 if (user != null && (username = UserObject.getPublicUsername(user)) != null) {
-                    link = MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/s/" + media.id;
+                    link = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/s/" + media.id;
                 }
                 if (link != null) {
                     SpannableString str = new SpannableString(link);

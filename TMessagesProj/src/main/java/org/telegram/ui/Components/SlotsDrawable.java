@@ -261,6 +261,11 @@ public class SlotsDrawable extends RLottieDrawable {
         if (secondNativePtr != 0 || secondLoadingInBackground) {
             return true;
         }
+        // Self-hosted servers may return a partial (or missing) dice sticker set.
+        // Slot machine animations index documents up to 20, so a short set must not crash.
+        if (stickerSet == null || stickerSet.documents == null || stickerSet.documents.size() < 21) {
+            return false;
+        }
         init(number);
         MessageObject currentMessageObject = messageCell.getMessageObject();
         int account = messageCell.getMessageObject().currentAccount;
@@ -330,6 +335,9 @@ public class SlotsDrawable extends RLottieDrawable {
                     } else {
                         num = 2;
                     }
+                }
+                if (num >= stickerSet.documents.size()) {
+                    continue;
                 }
                 TLRPC.Document document = stickerSet.documents.get(num);
                 File path = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);

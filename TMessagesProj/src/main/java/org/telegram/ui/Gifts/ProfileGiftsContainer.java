@@ -870,7 +870,7 @@ public class ProfileGiftsContainer extends FrameLayout implements NotificationCe
                     final TL_stars.TL_starGiftUnique gift = (TL_stars.TL_starGiftUnique) savedStarGift.gift;
                     final String link;
                     if (savedStarGift.gift.slug != null) {
-                        link = MessagesController.getInstance(currentAccount).linkPrefix + "/nft/" + savedStarGift.gift.slug;
+                        link = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/nft/" + savedStarGift.gift.slug;
                     } else {
                         link = null;
                     }
@@ -1229,7 +1229,7 @@ public class ProfileGiftsContainer extends FrameLayout implements NotificationCe
                 })
                 .addIf(isMine, R.drawable.menu_gift_add, getString(R.string.Gift2CollectionsAdd), this::addGifts)
                 .addIf(!TextUtils.isEmpty(username), R.drawable.msg_share, getString(R.string.Gift2CollectionsShare), () -> {
-                    final String link = MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/c/" + collection.collection_id;
+                    final String link = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/c/" + collection.collection_id;
                     new ShareAlert(context, null, link, false, link, false, resourcesProvider) {
                         @Override
                         protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic, boolean showToast) {

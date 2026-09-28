@@ -8380,7 +8380,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 sentMessage.media = newMsg.media;
             } else if (newMsgObj.isLiveLocation() && sentMessage.media instanceof TLRPC.TL_messageMediaGeoLive) {
                 newMsg.media.period = sentMessage.media.period;
-            } else if (newMsgObj.isDice()) {
+            } else if (newMsgObj.isDice() && sentMessage.media instanceof TLRPC.TL_messageMediaDice) {
+                // A self-hosted server may echo the sent dice back with different (or empty)
+                // media; keep the local dice state instead of crashing.
                 TLRPC.TL_messageMediaDice mediaDice = (TLRPC.TL_messageMediaDice) newMsg.media;
                 TLRPC.TL_messageMediaDice mediaDiceNew = (TLRPC.TL_messageMediaDice) sentMessage.media;
                 mediaDice.value = mediaDiceNew.value;

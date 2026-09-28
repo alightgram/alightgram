@@ -6627,7 +6627,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(getChatId());
             String url, username;
             if (!TextUtils.isEmpty(username = ChatObject.getPublicUsername(currentChat))) {
-                url = accountInstance.getMessagesController().linkPrefix + "/" + username;
+                url = accountInstance.getMessagesController().getDisplayLinkPrefix() + "/" + username;
             } else {
                 url = chatFull != null && chatFull.exported_invite != null ? chatFull.exported_invite.link : null;
             }
@@ -6674,7 +6674,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         invites[0] = null;
                     }
                     if (invites[0] == null && invites[1] == null && ChatObject.isPublic(currentChat)) {
-                        openShareAlert(true, null, accountInstance.getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(currentChat), copy);
+                        openShareAlert(true, null, accountInstance.getMessagesController().getDisplayLinkPrefix() + "/" + ChatObject.getPublicUsername(currentChat), copy);
                     } else {
                         openShareAlert(false, invites[0], invites[1], copy);
                     }

@@ -39238,7 +39238,7 @@ public class ChatActivity extends BaseFragment implements
                 return;
             }
             if (!TextUtils.isEmpty(giftSlug)) {
-                Browser.openUrl(getContext(), "https://" + getMessagesController().linkPrefix + "/nft/" + giftSlug);
+                Browser.openUrl(getContext(), "https://" + getMessagesController().getDisplayLinkPrefix() + "/nft/" + giftSlug);
                 return;
             }
             PremiumPreviewBottomSheet premiumPreviewBottomSheet = new PremiumPreviewBottomSheet(ChatActivity.this, currentAccount, user, themeDelegate);

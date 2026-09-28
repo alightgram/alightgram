@@ -682,7 +682,7 @@ public class ProfileActivity2 extends BaseFragment implements
                     getConnectionsManager().bindRequestToGuid(reqId, getClassGuid());
                 } else {
                     setLoadingSpan(null);
-                    String urlFinal = getMessagesController().linkPrefix + "/" + usernameRaw;
+                    String urlFinal = getMessagesController().getDisplayLinkPrefix() + "/" + usernameRaw;
                     if (chat == null || !chat.noforwards) {
                         AndroidUtilities.addToClipboard(urlFinal);
                         BulletinFactory.of(ProfileActivity2.this).createCopyBulletin(getString(R.string.UsernameCopied)).show();

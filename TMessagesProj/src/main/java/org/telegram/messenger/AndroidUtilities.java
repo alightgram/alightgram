@@ -5021,7 +5021,7 @@ public class AndroidUtilities {
         String link;
         if (object instanceof TLRPC.TL_wallPaper) {
             TLRPC.TL_wallPaper wallPaper = (TLRPC.TL_wallPaper) object;
-            link = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/bg/" + wallPaper.slug;
+            link = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/bg/" + wallPaper.slug;
             StringBuilder modes = new StringBuilder();
             if (wallPaper.settings != null) {
                 if (wallPaper.settings.blur) {

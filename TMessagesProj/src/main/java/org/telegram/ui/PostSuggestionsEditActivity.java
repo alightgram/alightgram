@@ -152,7 +152,7 @@ public class PostSuggestionsEditActivity extends BaseFragment {
             final TLRPC.Chat chat = getMessagesController().getChat(currentChatId);
             if (chat != null && !TextUtils.isEmpty(ChatObject.getPublicUsername(chat))) {
                 linkView.setLink(
-                    getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(chat) + "?direct"
+                    getMessagesController().getDisplayLinkPrefix() + "/" + ChatObject.getPublicUsername(chat) + "?direct"
                 );
                 items.add(UItem.asHeader(getString(R.string.ChannelLinkDirectMessages)));
                 items.add(UItem.asCustom(5, linkView));

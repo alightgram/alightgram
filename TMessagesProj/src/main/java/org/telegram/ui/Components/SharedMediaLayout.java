@@ -12334,7 +12334,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             return;
         }
 
-        final String link = "https://" + MessagesController.getInstance(fragment.getCurrentAccount()).linkPrefix + "/"+ username + "/a/" + albumId;
+        final String link = "https://" + MessagesController.getInstance(fragment.getCurrentAccount()).getDisplayLinkPrefix() + "/"+ username + "/a/" + albumId;
         options.add(R.drawable.media_share, getString(R.string.StoriesAlbumMenuShareLink), () -> {
             ShareAlert alert = new ShareAlert(getContext(), null, link, false, link, false, resourcesProvider) {
                 @Override

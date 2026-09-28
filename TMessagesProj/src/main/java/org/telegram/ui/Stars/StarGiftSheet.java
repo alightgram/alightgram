@@ -4061,7 +4061,7 @@ public class StarGiftSheet extends BottomSheetWithRecyclerListView implements No
             LocaleController.formatString(R.string.Gift2ReleasedBy2, "@" + username),
             () -> {
                 dismiss();
-                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username);
+                Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username);
             }
         );
     }
@@ -4074,7 +4074,7 @@ public class StarGiftSheet extends BottomSheetWithRecyclerListView implements No
             return null;
         return replaceSingleTagToLink(LocaleController.formatPluralStringComma("Gift2CollectionNumberBy", num, "@" + username), () -> {
             dismiss();
-            Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username);
+            Browser.openUrl(getContext(), "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username);
         });
     }
 
@@ -5280,7 +5280,7 @@ public class StarGiftSheet extends BottomSheetWithRecyclerListView implements No
     private String getLink() {
         final TL_stars.StarGift starGift = getGift();
         if (starGift instanceof TL_stars.TL_starGiftUnique && starGift.slug != null) {
-            return MessagesController.getInstance(currentAccount).linkPrefix + "/nft/" + starGift.slug;
+            return MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/nft/" + starGift.slug;
         }
         return null;
     }

@@ -458,6 +458,8 @@ public class StakedDiceSheet extends BottomSheetWithRecyclerListView {
         if (fragment == null) return;
 
         final BaseFragment f = fragment;
+        // A detached fragment has no context; building the bulletin layout would crash.
+        if (f.getContext() == null) return;
 
         final TLRPC.EmojiGameInfo stakeDiceInfo = MessagesController.getInstance(f.getCurrentAccount()).stakeDiceInfo;
         if (!(stakeDiceInfo instanceof TLRPC.TL_emojiGameDiceInfo)) {

@@ -3808,7 +3808,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
             if (!TextUtils.isEmpty(gift.slug)) {
                 ScaleStateListAnimator.apply(imageView);
                 imageView.setOnClickListener(v -> {
-                    Browser.openUrl(context, "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/nft/" + gift.slug);
+                    Browser.openUrl(context, "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/nft/" + gift.slug);
                 });
             }
 
@@ -4109,7 +4109,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                 final String slug = transaction.stargift.slug;
                 if (!TextUtils.isEmpty(slug)) {
                     tableView.addRowLink(getString(R.string.Gift2Gift), transaction.stargift.title + " #" + transaction.stargift.num, () -> {
-                        Browser.openUrl(context, "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/nft/" + slug);
+                        Browser.openUrl(context, "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/nft/" + slug);
                     });
                 }
                 final long selfId = UserConfig.getInstance(currentAccount).getClientUserId();
@@ -4462,7 +4462,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                 if (TextUtils.isEmpty(username)) {
                     ssb.append(chat.title);
                 } else {
-                    ssb.append(MessagesController.getInstance(currentAccount).linkPrefix + "/" + username + "/" + transaction.msg_id);
+                    ssb.append(MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username + "/" + transaction.msg_id);
                 }
                 final long finalDialogId = did;
                 Runnable open = () -> {

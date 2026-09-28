@@ -1102,8 +1102,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (LoginActivity.loadCurrentState(false, currentAccount).getInt("currentViewNum", 0) != 0) {
             return new LoginActivity();
         }
-        // Adding a second account - skip intro, auto-join the built-in server
-        // (same as first launch); the picker remains as the manual escape hatch.
+        // Adding a second account - skip intro and silently connect to the
+        // built-in server, same as the first-launch flow.
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             if (a != currentAccount && UserConfig.getInstance(a).isClientActivated()) {
                 return new ServerSelectFragment(true);

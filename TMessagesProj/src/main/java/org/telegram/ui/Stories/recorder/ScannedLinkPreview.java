@@ -283,9 +283,11 @@ public class ScannedLinkPreview extends View {
             try {
                 final MessagesController mc = MessagesController.getInstance(currentAccount);
                 final String prefix = mc.linkPrefix;
+                final String displayPrefix = mc.getDisplayLinkPrefix();
 
                 final Uri uri = Uri.parse(link);
-                if (!TextUtils.equals(uri.getHost(), prefix)) {
+                // Own links are printed with the cosmetic domain; accept the raw endpoint too.
+                if (!TextUtils.equals(uri.getHost(), prefix) && !TextUtils.equals(uri.getHost(), displayPrefix)) {
                     return null;
                 }
 

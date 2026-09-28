@@ -12,7 +12,7 @@ public class ChannelBoostUtilities {
         String username = ChatObject.getPublicUsername(chat);
         // linkPrefix is this account's own server domain (me_url_prefix); must not be
         // hardcoded to t.me, or self-hosted boost links point at official Telegram.
-        String linkPrefix = MessagesController.getInstance(currentAccount).linkPrefix;
+        String linkPrefix = MessagesController.getInstance(currentAccount).getDisplayLinkPrefix();
         if (!TextUtils.isEmpty(username)) {
             return "https://" + linkPrefix + "/boost/" + ChatObject.getPublicUsername(chat);
         } else {

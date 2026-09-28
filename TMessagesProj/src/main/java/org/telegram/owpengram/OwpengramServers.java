@@ -37,13 +37,20 @@ public class OwpengramServers {
     // VirusGram's MTProto server RSA key. Must pair with the private key deployed
     // on the server (generated 2026-09-27, see server-keys/rsa_private.pem).
     static final String OWPENGRAM_RSA_KEY =
-        "-----BEGIN RSA PUBLIC KEY-----\n" +
-        "MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ\n" +
-        "EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5\n" +
-        "oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ\n" +
-        "nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6\n" +
-        "kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM\n" +
-        "RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB\n" +
+        "-----BEGIN RSA PUBLIC KEY-----
+" +
+        "MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ
+" +
+        "EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5
+" +
+        "oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ
+" +
+        "nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6
+" +
+        "kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM
+" +
+        "RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB
+" +
         "-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
@@ -261,6 +268,18 @@ public class OwpengramServers {
     }
 
     /**
+     * Endpoint text shown in the server UI (picker row, info header, unreachable
+     * dialog). The built-in VirusGram server is shown by its public domain so the
+     * raw IP is never displayed; custom and Telegram servers keep their real host.
+     */
+    public static String displayEndpoint(OwpengramServer s) {
+        if (s != null && !s.isTelegram && ID_OWPENGRAM.equals(s.id)) {
+            return DISPLAY_LINK_PREFIX;
+        }
+        return (s == null || s.host == null ? "?" : s.host) + ":" + (s == null ? 0 : s.port);
+    }
+
+    /**
      * Whether the account's current server uses email as the account identity
      * instead of a real phone number (help.getAppConfig `email_signup_enabled`,
      * MessagesController.emailSignupEnabled, refreshed on every appConfig
@@ -418,6 +437,11 @@ public class OwpengramServers {
         // owpengram marker have been refetched (e.g. after the admin changed the prefix).
         OwpengramServer server = getServerForAccount(accountNum);
         if (server != null && server.host != null && host.equalsIgnoreCase(server.host)) {
+            return true;
+        }
+        // The cosmetic display prefix (virusgram.cc) is what the UI prints into every
+        // shared username/link, so links carrying it must route back into the app.
+        if (host.equalsIgnoreCase(DISPLAY_LINK_PREFIX)) {
             return true;
         }
         return false;

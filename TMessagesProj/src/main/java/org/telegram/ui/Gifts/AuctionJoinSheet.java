@@ -668,7 +668,7 @@ public class AuctionJoinSheet extends BottomSheetWithRecyclerListView implements
             @Override
             public void onItemClick(int id) {
                 if (id == copy_link || id == share_link) {
-                    final String link = MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/auction/" + starGift.auction_slug;
+                    final String link = MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/auction/" + starGift.auction_slug;
                     if (id == copy_link) {
                         AndroidUtilities.addToClipboard(link);
                     } else {

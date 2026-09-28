@@ -825,7 +825,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                         username = username.substring(1);
                     }
                     if (username.length() > 0) {
-                        String url = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username;
+                        String url = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username;
                         String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                         int index = text.indexOf(url);
                         SpannableStringBuilder textSpan = new SpannableStringBuilder(text);

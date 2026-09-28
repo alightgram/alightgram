@@ -322,7 +322,7 @@ public class QrActivity extends BaseFragment {
         qrView = new QrView(context);
         qrView.setColors(0xFF71B654, 0xFF2C9077, 0xFF9ABB3E, 0xFF68B55E);
         if (link == null && username != null) {
-            link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username;
+            link = "https://" + MessagesController.getInstance(currentAccount).getDisplayLinkPrefix() + "/" + username;
         }
         qrView.setData(link, userfullname != null ? userfullname : username, isPhone, isTimer);
         qrView.setCenterChangedListener((left, top, right, bottom) -> {

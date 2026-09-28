@@ -97,7 +97,7 @@ public class FragmentUsernameBottomSheet {
         if (type == TYPE_USERNAME) {
             title = LocaleController.formatString(R.string.FragmentUsernameTitle, "@" + name);
             message = LocaleController.formatString(R.string.FragmentUsernameMessage, LocaleController.formatShortDateTime(info.purchase_date), crypto_money, TextUtils.isEmpty(money) ? "" : "(" + money + ")");
-            link = MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + name;
+            link = MessagesController.getInstance(UserConfig.selectedAccount).getDisplayLinkPrefix() + "/" + name;
         } else if (type == TYPE_PHONE) {
             title = LocaleController.formatString(R.string.FragmentPhoneTitle, PhoneFormat.getInstance().format("+" + name));
             message = LocaleController.formatString(R.string.FragmentPhoneMessage, LocaleController.formatShortDateTime(info.purchase_date), crypto_money, TextUtils.isEmpty(money) ? "" : "(" + money + ")");
