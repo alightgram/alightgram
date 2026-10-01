@@ -37,20 +37,13 @@ public class OwpengramServers {
     // VirusGram's MTProto server RSA key. Must pair with the private key deployed
     // on the server (generated 2026-09-27, see server-keys/rsa_private.pem).
     static final String OWPENGRAM_RSA_KEY =
-        "-----BEGIN RSA PUBLIC KEY-----
-" +
-        "MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ
-" +
-        "EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5
-" +
-        "oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ
-" +
-        "nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6
-" +
-        "kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM
-" +
-        "RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB
-" +
+        "-----BEGIN RSA PUBLIC KEY-----\n" +
+        "MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ\n" +
+        "EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5\n" +
+        "oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ\n" +
+        "nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6\n" +
+        "kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM\n" +
+        "RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB\n" +
         "-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
