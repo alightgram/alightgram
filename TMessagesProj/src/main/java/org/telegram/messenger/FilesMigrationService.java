@@ -97,8 +97,8 @@ public class FilesMigrationService extends Service {
         }
 
         File newPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-        File telegramPath = new File(newPath, "VirusGram");
-        File oldPath = new File(path, "VirusGram");
+        File telegramPath = new File(newPath, "MonoGram");
+        File oldPath = new File(path, "MonoGram");
 
         totalFilesCount = getFilesCount(oldPath);
 
@@ -204,7 +204,7 @@ public class FilesMigrationService extends Service {
                     }
                 }
             }
-            File oldDirectory = new File(path, "VirusGram");
+            File oldDirectory = new File(path, "MonoGram");
             hasOldFolder = oldDirectory.exists();
         }
         if (hasOldFolder) {

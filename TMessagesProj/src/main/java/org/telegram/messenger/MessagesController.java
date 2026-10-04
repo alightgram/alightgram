@@ -509,7 +509,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public String getDisplayLinkPrefix() {
         return OwpengramServers.displayLinkPrefixForAccount(currentAccount, linkPrefix);
     }
-    // VirusGram: the server's help.getAppConfig advertises owpengram=true. Used to
+    // MonoGram: the server's help.getAppConfig advertises owpengram=true. Used to
     // treat links on this account's linkPrefix host as internal owpg links (not the
     // official Telegram network, and not other forks). Mirrors the desktop
     // OwpengramAccountHost gate on appConfig().get<bool>("owpengram").
@@ -2692,7 +2692,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC.TL_jsonObjectValue value = object.value.get(a);
             switch (value.key) {
                 case "owpengram": {
-                    // VirusGram self-hosted server marker (true/"true"). See owpengramServer field.
+                    // MonoGram self-hosted server marker (true/"true"). See owpengramServer field.
                     sawOwpengram = true;
                     boolean val = (value.value instanceof TLRPC.TL_jsonBool && ((TLRPC.TL_jsonBool) value.value).value)
                             || (value.value instanceof TLRPC.TL_jsonString && "true".equalsIgnoreCase(((TLRPC.TL_jsonString) value.value).value));
@@ -5064,7 +5064,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
 
-        // Clear the VirusGram marker if the server stopped advertising it.
+        // Clear the MonoGram marker if the server stopped advertising it.
         if (!sawOwpengram && owpengramServer) {
             owpengramServer = false;
             editor.putBoolean("owpengramServer", false);
@@ -5886,7 +5886,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC.TL_userForeign_old2 user = new TLRPC.TL_userForeign_old2();
         user.phone = "333";
         user.id = 333000;
-        user.first_name = "VirusGram";
+        user.first_name = "MonoGram";
         user.last_name = "";
         user.status = null;
         user.photo = new TLRPC.TL_userProfilePhotoEmpty();
@@ -5896,7 +5896,7 @@ public class MessagesController extends BaseController implements NotificationCe
         user.phone = "42777";
         user.id = 777000;
         user.verified = true;
-        user.first_name = "VirusGram";
+        user.first_name = "MonoGram";
         user.last_name = "Notifications";
         user.status = null;
         user.photo = new TLRPC.TL_userProfilePhotoEmpty();

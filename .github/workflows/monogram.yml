@@ -1,4 +1,4 @@
-name: VirusGram build
+name: MonoGram build
 
 on:
   push:
@@ -23,9 +23,9 @@ jobs:
             TMessagesProj/build
             TMessagesProj_App/build
             TMessagesProj/.cxx
-          key: virusgram-build-${{ github.sha }}
+          key: monogram-build-${{ github.sha }}
           restore-keys: |
-            virusgram-build-
+            monogram-build-
 
       - name: Free up disk space
         uses: jlumbroso/free-disk-space@v1.3.1
@@ -70,11 +70,11 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p artifact
-          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/VirusGram.apk"
+          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/MonoGram.apk"
           ls -la artifact/
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VirusGram-APK
-          path: artifact/VirusGram.apk
+          name: MonoGram-APK
+          path: artifact/MonoGram.apk
           if-no-files-found: error

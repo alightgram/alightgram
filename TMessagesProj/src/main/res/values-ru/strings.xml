@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">VirusGram</string>
-    <string name="AppNameBeta">VirusGram Beta</string>
+    <string name="AppName">MonoGram</string>
+    <string name="AppNameBeta">MonoGram Beta</string>
     <string name="LanguageName">Русский</string>
     <string name="English">Английский</string>
     <string name="LanguageNameInEnglish">Russian</string>
@@ -27,7 +27,7 @@
     <string name="WrongNumberFormat">Некорректный формат</string>
     <string name="ShortNumberInfo">Указанный номер слишком короткий для региона **%1$s**:\n\n**%2$s**\n\nУбедитесь, что правильно указываете номер. Он должен начинаться с кода страны.</string>
     <string name="EditNumber">Изменить номер</string>
-    <string name="DidNotGetTheCodeInfo">Если Вы не получили звонок или SMS с кодом, проверьте настройки сотовой связи и указанный Вами номер:\n\n**%1$s**\n\nЕсли это не помогло, Вы можете указать другой номер телефона или связаться с командой поддержки VirusGram. Чтобы сообщить нам о проблеме и отправить техническую информацию для диагностики, нажмите **Помощь**.</string>
+    <string name="DidNotGetTheCodeInfo">Если Вы не получили звонок или SMS с кодом, проверьте настройки сотовой связи и указанный Вами номер:\n\n**%1$s**\n\nЕсли это не помогло, Вы можете указать другой номер телефона или связаться с командой поддержки MonoGram. Чтобы сообщить нам о проблеме и отправить техническую информацию для диагностики, нажмите **Помощь**.</string>
     <string name="DidNotGetTheCodeHelpButton">Помощь</string>
     <string name="DidNotGetTheCodeEditNumberButton">Другой номер</string>
     <!--code enter view-->
