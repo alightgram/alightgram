@@ -1494,7 +1494,8 @@ public class LocaleController {
                 .replace("alightgram", "monogram")
                 .replace("VirusGram", "MonoGram")
                 .replace("VIRUSGRAM", "MONOGRAM")
-                .replace("virusgram", "monogram");};
+                .replace("virusgram", "monogram");
+    }
     private static char[][] otherNumbers = new char[][]{
             {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'},
             {'۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'},
