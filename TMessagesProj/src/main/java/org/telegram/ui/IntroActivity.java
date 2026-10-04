@@ -261,7 +261,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         // visible there. It fades out as the user swipes to the feature pages.
         introLogoView = new ImageView(context);
         introLogoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        introLogoView.setImageResource(R.drawable.server_virusgram);
+        introLogoView.setImageResource(R.drawable.server_monogram);
         frameLayout2.addView(introLogoView, LayoutHelper.createFrame(ICON_HEIGHT_DP, ICON_HEIGHT_DP, Gravity.CENTER));
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override

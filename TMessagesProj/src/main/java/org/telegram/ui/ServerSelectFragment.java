@@ -542,7 +542,7 @@ public class ServerSelectFragment extends BaseFragment {
     private static final java.util.HashMap<String, android.graphics.Bitmap> SERVER_LOGO_CACHE = new java.util.HashMap<>();
     private static android.graphics.Bitmap serverLogo(Context ctx, String id) {
         int res = 0;
-        if (OwpengramServers.ID_OWPENGRAM.equals(id)) res = org.telegram.messenger.R.drawable.server_virusgram;
+        if (OwpengramServers.ID_OWPENGRAM.equals(id)) res = org.telegram.messenger.R.drawable.server_monogram;
         else if (OwpengramServers.ID_TELEGRAM.equals(id)) res = org.telegram.messenger.R.drawable.server_telegram;
         if (res == 0 || ctx == null) return null;
         android.graphics.Bitmap b = SERVER_LOGO_CACHE.get(id);
