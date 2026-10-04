@@ -1496,6 +1496,351 @@ public class LocaleController {
                 .replace("VIRUSGRAM", "MONOGRAM")
                 .replace("virusgram", "monogram");
     }
+
+    public static String getServerString(String key) {
+        String value = getInstance().localeValues.get(key);
+        if (value == null) {
+            int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key, "string", ApplicationLoader.applicationContext.getPackageName());
+            if (resourceId != 0) {
+                value = ApplicationLoader.applicationContext.getString(resourceId);
+            }
+        }
+        return normalizeBranding(value);
+    }
+
+    public static String getString(@StringRes int res) {
+        String key = resourcesCacheMap.get(res);
+        if (key == null) {
+            resourcesCacheMap.put(res, key = ApplicationLoader.applicationContext.getResources().getResourceEntryName(res));
+        }
+        return getString(key, res);
+    }
+
+    // deprecated: String key is no longer necessary
+    @Deprecated
+    public static String getString(String key, @StringRes int res) {
+        return getInstance().getStringInternal(key, res);
+    }
+
+    // deprecated: String key is no longer necessary
+    @Deprecated
+    public static String getString(String key, String fallback, int fallbackRes, int res) {
+        return getInstance().getStringInternal(key, fallback, fallbackRes, res);
+    }
+
+    // deprecated: String key is no longer necessary
+    @Deprecated
+    public static String getString(String key, String fallback, int res) {
+        return getInstance().getStringInternal(key, fallback, 0, res);
+    }
+
+    // deprecated: String key is no longer necessary
+    @Deprecated
+    public static String getString(String key) {
+        if (TextUtils.isEmpty(key)) {
+            return "LOC_ERR:" + key;
+        }
+        int resourceId = getStringResId(key);
+        if (resourceId != 0) {
+            return getString(key, resourceId);
+        }
+        return getServerString(key);
+    }
+
+    public static int getStringResId(String key) {
+        return ApplicationLoader.applicationContext.getResources().getIdentifier(key, "string", ApplicationLoader.applicationContext.getPackageName());
+    }
+
+    public static String nullable(String val) {
+        if (val == null || val.startsWith("LOC_ERR")) return null;
+        return val;
+    }
+
+    public static String getPluralString(String key, int plural) {
+        if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
+            return "LOC_ERR:" + key;
+        }
+        String param = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
+        param = key + "_" + param;
+        int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(param, "string", ApplicationLoader.applicationContext.getPackageName());
+        int fallbackResourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key + "_other", "string", ApplicationLoader.applicationContext.getPackageName());
+        return getString(param, key + "_other", resourceId, fallbackResourceId);
+    }
+
+    public static String formatPluralString(String key, int plural, Object... args) {
+        if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
+            return "LOC_ERR:" + key;
+        }
+        String param = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
+        param = key + "_" + param;
+        int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(param, "string", ApplicationLoader.applicationContext.getPackageName());
+        int fallbackResourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key + "_other", "string", ApplicationLoader.applicationContext.getPackageName());
+        Object[] argsWithPlural = new Object[args.length + 1];
+        argsWithPlural[0] = plural;
+        System.arraycopy(args, 0, argsWithPlural, 1, args.length);
+        return formatString(param, key + "_other", resourceId, fallbackResourceId, argsWithPlural);
+    }
+
+    public static CharSequence formatPluralSpannable(String key, int plural, CharSequence... args) {
+        if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
+            return "LOC_ERR:" + key;
+        }
+        String param = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
+        param = key + "_" + param;
+        int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(param, "string", ApplicationLoader.applicationContext.getPackageName());
+        int fallbackResourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key + "_other", "string", ApplicationLoader.applicationContext.getPackageName());
+        Object[] argsWithPlural = new Object[args.length + 1];
+        argsWithPlural[0] = plural;
+        System.arraycopy(args, 0, argsWithPlural, 1, args.length);
+        return formatSpannable(param, key + "_other", resourceId, fallbackResourceId, argsWithPlural);
+    }
+
+    public static String getStringParamForNumber(int number) {
+        return getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(number));
+    }
+
+    public static String formatPluralStringComma(String key, int plural) {
+        return formatPluralStringComma(key, plural, ',');
+    }
+
+    public static String formatPluralStringSpaced(String key, int plural) {
+        return formatPluralStringComma(key, plural, ' ');
+    }
+
+    public static String formatPluralStringSpaced(String key, int plural, Object... args) {
+        return formatPluralStringComma(key, plural, ' ', args);
+    }
+
+    public static String formatPluralStringComma(String key, int plural, Object... args) {
+        return formatPluralStringComma(key, plural, ',', args);
+    }
+
+
+    public static String formatPluralStringComma(String key, int plural, char symbol) {
+        return formatPluralStringComma(key, plural, symbol, new Object[] {});
+    }
+
+    public static CharSequence bold(CharSequence text) {
+        if (text instanceof Spannable) {
+            ((Spannable) text).setSpan(new TypefaceSpan(AndroidUtilities.bold()), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return text;
+        } else {
+            SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+            ssb.setSpan(new TypefaceSpan(AndroidUtilities.bold()), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return ssb;
+        }
+    }
+
+    public static String formatPluralStringComma(String key, int plural, char symbol, Object... args) {
+        try {
+            if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
+                return "LOC_ERR:" + key;
+            }
+            String param = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
+            param = key + "_" + param;
+            StringBuilder stringBuilder = new StringBuilder(String.format("%d", plural));
+            for (int a = stringBuilder.length() - 3; a > 0; a -= 3) {
+                stringBuilder.insert(a, symbol);
+            }
+
+            String value = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(param) : null;
+            if (value == null) {
+                value = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(key + "_other") : null;
+            }
+            if (value == null) {
+                try {
+                    int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(param, "string", ApplicationLoader.applicationContext.getPackageName());
+                    value = ApplicationLoader.applicationContext.getString(resourceId);
+                } catch (Exception e2) {}
+            }
+            if (value == null) {
+                int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key + "_other", "string", ApplicationLoader.applicationContext.getPackageName());
+                value = ApplicationLoader.applicationContext.getString(resourceId);
+            }
+            value = value.replace("%d", "%1$s");
+            value = value.replace("%1$d", "%1$s");
+
+            Object[] a = new Object[(args == null ? 0 : args.length) + 1];
+            for (int i = 0; i < a.length; ++i) {
+                a[i] = i == 0 ? stringBuilder : args[i - 1];
+            }
+            if (getInstance().currentLocale != null) {
+                return normalizeBranding(String.format(getInstance().currentLocale, value, a));
+            } else {
+                return normalizeBranding(String.format(value, a));
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+            return "LOC_ERR: " + key;
+        }
+    }
+
+    public static String formatNumber(long count, char symbol) {
+        if (count < 0) {
+            return "-" + formatNumber(-count, symbol);
+        }
+
+        StringBuilder stringBuilder = new StringBuilder(String.format("%d", count));
+        for (int a = stringBuilder.length() - 3; a > 0; a -= 3) {
+            stringBuilder.insert(a, symbol);
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String formatNumberWithMillion(long count, char symbol) {
+        if (count < 1_000_000) {
+            return formatNumber(count, symbol);
+        }
+
+        return formatWholeNumber((int) count, 1_000_000);
+    }
+
+    public static String formatString(@StringRes int res, Object... args) {
+        String key = resourcesCacheMap.get(res);
+        if (key == null) {
+            resourcesCacheMap.put(res, key = ApplicationLoader.applicationContext.getResources().getResourceEntryName(res));
+        }
+        return formatString(key, res, args);
+    }
+
+    // deprecated: String key is no longer necessary
+    @Deprecated
+    public static String formatString(String key, int res, Object... args) {
+        return formatString(key, null, res, 0, args);
+    }
+
+    public static String formatString(String key, String fallback, int res, int fallbackRes, Object... args) {
+        try {
+            String value = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(key) : null;
+            if (value == null) {
+                if (BuildVars.USE_CLOUD_STRINGS && fallback != null) {
+                    value = getInstance().localeValues.get(fallback);
+                }
+                if (value == null) {
+                    if (res != 0) {
+                        try {
+                            value = ApplicationLoader.applicationContext.getString(res);
+                        } catch (Exception e) {
+                            if (fallbackRes != 0) {
+                                try {
+                                    value = ApplicationLoader.applicationContext.getString(fallbackRes);
+                                } catch (Exception ignored) {}
+                            }
+                        }
+                    } else if (fallbackRes != 0) {
+                        try {
+                            value = ApplicationLoader.applicationContext.getString(fallbackRes);
+                        } catch (Exception ignored) {}
+                    }
+                }
+            }
+
+            if (getInstance().currentLocale != null) {
+                return normalizeBranding(String.format(getInstance().currentLocale, value, args));
+            } else {
+                return normalizeBranding(String.format(value, args));
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+            return "LOC_ERR: " + key;
+        }
+    }
+
+    public static CharSequence formatSpannable(@StringRes int res, Object... args) {
+        String key = resourcesCacheMap.get(res);
+        if (key == null) {
+            resourcesCacheMap.put(res, key = ApplicationLoader.applicationContext.getResources().getResourceEntryName(res));
+        }
+        return formatSpannable(key, res, args);
+    }
+
+    public static CharSequence formatSpannable(String key, int res, Object... args) {
+        return formatSpannable(key, null, res, 0, args);
+    }
+
+    public static CharSequence formatSpannable(String key, String fallback, int res, int fallbackRes, Object... args) {
+        try {
+            String value = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(key) : null;
+            if (value == null) {
+                if (BuildVars.USE_CLOUD_STRINGS && fallback != null) {
+                    value = getInstance().localeValues.get(fallback);
+                }
+                if (value == null) {
+                    if (res != 0) {
+                        try {
+                            value = ApplicationLoader.applicationContext.getString(res);
+                        } catch (Exception e) {
+                            if (fallbackRes != 0) {
+                                try {
+                                    value = ApplicationLoader.applicationContext.getString(fallbackRes);
+                                } catch (Exception ignored) {}
+                            }
+                        }
+                    } else if (fallbackRes != 0) {
+                        try {
+                            value = ApplicationLoader.applicationContext.getString(fallbackRes);
+                        } catch (Exception ignored) {}
+                    }
+                }
+            }
+
+            value = normalizeBranding(value);
+            SpannableStringBuilder builder = new SpannableStringBuilder(value);
+            for (int i = 0; i < args.length; i++) {
+                String formatter = "s";
+                CharSequence replaceWith = "";
+                if (args[i] instanceof CharSequence) {
+                    replaceWith = (CharSequence) args[i];
+                } else if (args[i] instanceof Integer) {
+                    formatter = "d";
+                    replaceWith = "" + (Integer) args[i];
+                } else if (args[i] instanceof Long) {
+                    formatter = "d";
+                    replaceWith = "" + (Long) args[i];
+                } else if (args[i] == null) {
+                    replaceWith = "null";
+                }
+                final String placeholder = "%" + (i + 1) + "$" + formatter;
+                int start = builder.toString().indexOf(placeholder);
+                if (start != -1) {
+                    builder.replace(start, start + placeholder.length(), replaceWith);
+                } else {
+                    final String placeholder2 = "%" + formatter;
+                    start = builder.toString().indexOf(placeholder2);
+                    if (start != -1) {
+                        builder.replace(start, start + placeholder2.length(), replaceWith);
+                    }
+                }
+            }
+            return builder;
+        } catch (Exception e) {
+            FileLog.e(e);
+            return "LOC_ERR: " + key;
+        }
+    }
+
+    public static String formatTTLString(int ttl) {
+        if (ttl < 60) {
+            return LocaleController.formatPluralString("Seconds", ttl);
+        } else if (ttl < 60 * 60) {
+            return LocaleController.formatPluralString("Minutes", ttl / 60);
+        } else if (ttl < 60 * 60 * 24) {
+            return LocaleController.formatPluralString("Hours", ttl / 60 / 60);
+        } else if (ttl < 60 * 60 * 24 * 7) {
+            return LocaleController.formatPluralString("Days", ttl / 60 / 60 / 24);
+        } else if (ttl < 60 * 60 * 24 * 31) {
+            int days = ttl / 60 / 60 / 24;
+            if (ttl % 7 == 0) {
+                return LocaleController.formatPluralString("Weeks", days / 7);
+            } else {
+                return String.format("%s %s", LocaleController.formatPluralString("Weeks", days / 7), LocaleController.formatPluralString("Days", days % 7));
+            }
+        } else {
+            return LocaleController.formatPluralString("Months", ttl / 60 / 60 / 24 / 30);
+        }
+    }
+
+    private static char[] defaultNumbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     private static char[][] otherNumbers = new char[][]{
             {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'},
             {'۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'},
@@ -2900,8 +3245,8 @@ public class LocaleController {
     }
 
     /**
-     * MonoGram: cloud language packs are pulled from the server. This used to be
-     * disabled because official Telegram lang packs overwrote MonoGram's branded
+     * VirusGram: cloud language packs are pulled from the server. This used to be
+     * disabled because official Telegram lang packs overwrote VirusGram's branded
      * strings with stock "Telegram" wording; the server now re-brands every
      * langpack string before serving it (see branding.UserVisibleText in
      * owpengram-server), so that risk no longer applies. Mirrors the desktop
