@@ -31,21 +31,20 @@ public class OwpengramServers {
     /** Text shown in public username/link UI for self-hosted servers. */
     public static final String DISPLAY_LINK_PREFIX = "exilegram.cc";
 
-    private static final String DEFAULT_HOST = "13.143.175.171";
+    private static final String DEFAULT_HOST = "2.27.200.20";
     private static final int    DEFAULT_PORT = 2398;
 
     // ExileGram's MTProto server RSA key. Must pair with the private key deployed
     // on the ExileGram server (generated 2026-10-04).
     static final String OWPENGRAM_RSA_KEY =
-        "-----BEGIN RSA PUBLIC KEY-----\n" +
-        "MIIBCgKCAQEAmqjiOv7yOBhvYqMqh6jlvgVrHD4NH5UtKXDcQYyLEBClVuTsk/4p\n" +
-        "6Yq0PFALE1mvtwUYZYEVdZ5BBBMZ7w/0Qp3Jms/ATfHkCdMaFGhgQFZAlA/s3Cnl\n" +
-        "ygOgYN4tRuVdCxrtKbdj7A6I4Isc/OHGmrGui6V0T6DDbnNB9aUOCrlFU0GYlBLy\n" +
-        "1FQAce9oZfcM40GHyFVFWNZTcbEfJeBWymu9is5dbyw7hTs96gipCVs6cn1JU5h/\n" +
-        "gSs8ya/MFoAblPCdzByidxCopDsKsUP53rTCsoLjBhOQtvQglQKZU3AL1cSzFYar\n" +
-        "+g7Rmv46SyUby3CNdolFHBI/v+ekH6qa3QIDAQAB\n" +
-        "-----END RSA PUBLIC KEY-----\n"
-        "-----END RSA PUBLIC KEY-----";
+        "-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ
+EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5
+oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ
+nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6
+kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM
+RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB
+-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
 
