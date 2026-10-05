@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">MonoGram</string>
-    <string name="AppNameBeta">MonoGram Beta</string>
+    <string name="AppName">ExileGram</string>
+    <string name="AppNameBeta">ExileGram Beta</string>
     <string name="LanguageName">العربية</string>
     <string name="English">الإنجليزية</string>
     <string name="LanguageNameInEnglish">Arabic</string>

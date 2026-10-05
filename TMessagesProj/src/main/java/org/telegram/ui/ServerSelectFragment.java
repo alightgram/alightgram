@@ -89,7 +89,7 @@ public class ServerSelectFragment extends BaseFragment {
 
     /**
      * First-launch flow for the branded client: connect to the built-in
-     * MonoGram server without showing the server picker or Add Server form.
+     * ExileGram server without showing the server picker or Add Server form.
      */
     public ServerSelectFragment(boolean autoJoin) {
         this(-1, autoJoin);
@@ -97,7 +97,7 @@ public class ServerSelectFragment extends BaseFragment {
 
     /**
      * Full form: log into {@code loginAccount} and, with {@code autoJoin},
-     * silently connect to the built-in MonoGram server without showing
+     * silently connect to the built-in ExileGram server without showing
      * the picker (used by both first launch and add-account flows).
      */
     public ServerSelectFragment(int loginAccount, boolean autoJoin) {
@@ -139,7 +139,7 @@ public class ServerSelectFragment extends BaseFragment {
             actionBar.setAddToContainer(false);
         } else {
             actionBar.setBackButtonImage(org.telegram.messenger.R.drawable.ic_ab_back);
-            actionBar.setTitle("MonoGram");
+            actionBar.setTitle("ExileGram");
             actionBar.setSubtitle("Pick where to sign in");
             actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
                 @Override

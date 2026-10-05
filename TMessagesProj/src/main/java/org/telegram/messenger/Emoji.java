@@ -68,7 +68,7 @@ public class Emoji {
     public final static ArrayList<String> recentEmoji = new ArrayList<>();
     public final static HashMap<String, String> emojiColor = new HashMap<>();
     private static boolean recentEmojiLoaded;
-    // MonoGram: recent/frequently-used emoji — including custom "animated_<id>" entries — are
+    // ExileGram: recent/frequently-used emoji — including custom "animated_<id>" entries — are
     // scoped per backend server, not per device. See OwpengramServers.serverScopeKeyForAccount
     // for why device-wide sharing is wrong (a document id from one server's namespace can never
     // resolve on another). currentEmojiScopeKey names whichever scope is currently loaded into
@@ -982,7 +982,7 @@ public class Emoji {
         preferences.edit().putString(scopedPrefKey("emojis2"), stringBuilder.toString()).commit();
     }
 
-    // MonoGram: "" (default/Telegram scope) keeps the original, unsuffixed key so existing
+    // ExileGram: "" (default/Telegram scope) keeps the original, unsuffixed key so existing
     // installs keep reading/writing the same preference they always have.
     private static String scopedPrefKey(String base) {
         if (currentEmojiScopeKey == null || currentEmojiScopeKey.isEmpty()) {
@@ -1003,7 +1003,7 @@ public class Emoji {
         loadRecentEmoji(UserConfig.selectedAccount);
     }
 
-    // MonoGram: (re)loads the recent-emoji list scoped to whichever server `account` is
+    // ExileGram: (re)loads the recent-emoji list scoped to whichever server `account` is
     // currently connected to (see OwpengramServers.serverScopeKeyForAccount), swapping the
     // previously-active scope's in-memory state into recentByScope/historyByScope first. A
     // cheap no-op if that scope is already the one loaded — mirrors the original

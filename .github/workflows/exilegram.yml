@@ -1,4 +1,4 @@
-name: MonoGram build
+name: ExileGram build
 
 on:
   push:
@@ -23,9 +23,9 @@ jobs:
             TMessagesProj/build
             TMessagesProj_App/build
             TMessagesProj/.cxx
-          key: monogram-build-${{ github.sha }}
+          key: exilegram-build-${{ github.sha }}
           restore-keys: |
-            monogram-build-
+            exilegram-build-
 
       - name: Free up disk space
         uses: jlumbroso/free-disk-space@v1.3.1
@@ -70,11 +70,11 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p artifact
-          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/MonoGram.apk"
+          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/ExileGram.apk"
           ls -la artifact/
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MonoGram-APK
-          path: artifact/MonoGram.apk
+          name: ExileGram-APK
+          path: artifact/ExileGram.apk
           if-no-files-found: error

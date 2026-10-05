@@ -26,25 +26,26 @@ public class OwpengramServers {
     public static final String ID_OWPENGRAM = "owpengram";
     public static final String ID_TELEGRAM  = "telegram";
 
-    /** Public repository of the MonoGram server, opened from the settings entry. */
+    /** Public repository of the ExileGram server, opened from the settings entry. */
     public static final String SERVER_REPO_URL = "https://github.com/owpengram/owpengram-server";
     /** Text shown in public username/link UI for self-hosted servers. */
-    public static final String DISPLAY_LINK_PREFIX = "monogram.cc";
+    public static final String DISPLAY_LINK_PREFIX = "exilegram.cc";
 
-    private static final String DEFAULT_HOST = "2.27.200.20";
+    private static final String DEFAULT_HOST = "13.143.175.171";
     private static final int    DEFAULT_PORT = 2398;
 
-    // MonoGram's MTProto server RSA key. Must pair with the private key deployed
-    // on the MonoGram server (generated 2026-10-04).
+    // ExileGram's MTProto server RSA key. Must pair with the private key deployed
+    // on the ExileGram server (generated 2026-10-04).
     static final String OWPENGRAM_RSA_KEY =
-        "-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEA6L024qarZ6UI2b8JFVuptOt1SuHlclW275cx/ax74Lt7J7HkC/lw
-kezwP0SBu9uqpCn9ZOvaP6bKS7x1oX65jHfFBcH6cLlt9w/ko7Al6noQwdSKAl7I
-TVCX3bhw3DVh6hQ0T2igmlHn/vs2HpApn+dMQStNVGrNrZE9ynFMe/5lt6mwOBo0
-1FYC6U2Vrc8SfK17ROjSwLGC48Y4XNU2Hxqj/FkmO38Gf8QLuZOBDwGGS433sz5v
-+ehP7GIG38EukP50cAFJeb6X8gv+V49PqZuFzlmtMKUSDsNiNVgd4sCBAZXxnYwM
-tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB
------END RSA PUBLIC KEY-----";
+        "-----BEGIN RSA PUBLIC KEY-----\n" +
+        "MIIBCgKCAQEAmqjiOv7yOBhvYqMqh6jlvgVrHD4NH5UtKXDcQYyLEBClVuTsk/4p\n" +
+        "6Yq0PFALE1mvtwUYZYEVdZ5BBBMZ7w/0Qp3Jms/ATfHkCdMaFGhgQFZAlA/s3Cnl\n" +
+        "ygOgYN4tRuVdCxrtKbdj7A6I4Isc/OHGmrGui6V0T6DDbnNB9aUOCrlFU0GYlBLy\n" +
+        "1FQAce9oZfcM40GHyFVFWNZTcbEfJeBWymu9is5dbyw7hTs96gipCVs6cn1JU5h/\n" +
+        "gSs8ya/MFoAblPCdzByidxCopDsKsUP53rTCsoLjBhOQtvQglQKZU3AL1cSzFYar\n" +
+        "+g7Rmv46SyUby3CNdolFHBI/v+ekH6qa3QIDAQAB\n" +
+        "-----END RSA PUBLIC KEY-----\n"
+        "-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
 
@@ -65,8 +66,8 @@ tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB
     public static OwpengramServer owpengramServer() {
         OwpengramServer s = new OwpengramServer();
         s.id                 = ID_OWPENGRAM;
-        s.name               = "MonoGram";
-        s.description        = "MonoGram server.";
+        s.name               = "ExileGram";
+        s.description        = "ExileGram server.";
         s.host               = DEFAULT_HOST;
         s.port               = DEFAULT_PORT;
         s.isOfficial         = true;
@@ -238,7 +239,7 @@ tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB
     /**
      * Whether the account's current server is the official Telegram network.
      * Used to hide Telegram-specific help entries (Ask a Question, Telegram FAQ /
-     * Features, Privacy Policy) on MonoGram and other servers, where they don't apply.
+     * Features, Privacy Policy) on ExileGram and other servers, where they don't apply.
      */
     public static boolean serverIsOfficialTelegram(int accountNum) {
         OwpengramServer s = getServerForAccount(accountNum);
@@ -262,7 +263,7 @@ tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB
 
     /**
      * Endpoint text shown in the server UI (picker row, info header, unreachable
-     * dialog). The built-in MonoGram server is shown by its public domain so the
+     * dialog). The built-in ExileGram server is shown by its public domain so the
      * raw IP is never displayed; custom and Telegram servers keep their real host.
      */
     public static String displayEndpoint(OwpengramServer s) {
@@ -432,7 +433,7 @@ tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB
         if (server != null && server.host != null && host.equalsIgnoreCase(server.host)) {
             return true;
         }
-        // The cosmetic display prefix (monogram.cc) is what the UI prints into every
+        // The cosmetic display prefix (exilegram.cc) is what the UI prints into every
         // shared username/link, so links carrying it must route back into the app.
         if (host.equalsIgnoreCase(DISPLAY_LINK_PREFIX)) {
             return true;
