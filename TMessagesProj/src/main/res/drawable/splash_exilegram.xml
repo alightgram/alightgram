@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android 12+ system splash icon.
      The system scales this drawable to fill the icon area and masks it to a
-     circle. An <inset> with percentage insets guarantees the ExileGram logo
+     circle. An <inset> with percentage insets guarantees the AlightGram logo
      always occupies only the inner ~52% of whatever bounds the system uses, so
      the hexagon stays inside the circle with padding and is never clipped —
      unlike a layer-list, whose intrinsic size the splash system ignores. -->

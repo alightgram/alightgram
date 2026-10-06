@@ -1485,14 +1485,14 @@ public class LocaleController {
             return null;
         }
         return value
-                .replace("OwpenGram", "ExileGram")
+                .replace("OwpenGram", "AlightGram")
                 .replace("OWPENGRAM", "EXILEGRAM")
-                .replace("Owpengram", "ExileGram")
+                .replace("Owpengram", "AlightGram")
                 .replace("owpengram", "monogram")
-                .replace("AlightGram", "ExileGram")
+                .replace("AlightGram", "AlightGram")
                 .replace("ALIGHTGRAM", "EXILEGRAM")
                 .replace("alightgram", "monogram")
-                .replace("VirusGram", "ExileGram")
+                .replace("VirusGram", "AlightGram")
                 .replace("VIRUSGRAM", "EXILEGRAM")
                 .replace("virusgram", "monogram");
     }

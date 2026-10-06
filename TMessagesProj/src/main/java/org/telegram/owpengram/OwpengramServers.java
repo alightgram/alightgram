@@ -26,7 +26,7 @@ public class OwpengramServers {
     public static final String ID_OWPENGRAM = "owpengram";
     public static final String ID_TELEGRAM  = "telegram";
 
-    /** Public repository of the ExileGram server, opened from the settings entry. */
+    /** Public repository of the AlightGram server, opened from the settings entry. */
     public static final String SERVER_REPO_URL = "https://github.com/owpengram/owpengram-server";
     /** Text shown in public username/link UI for self-hosted servers. */
     public static final String DISPLAY_LINK_PREFIX = "exilegram.cc";
@@ -34,8 +34,8 @@ public class OwpengramServers {
     private static final String DEFAULT_HOST = "2.27.200.20";
     private static final int    DEFAULT_PORT = 2398;
 
-    // ExileGram's MTProto server RSA key. Must pair with the private key deployed
-    // on the ExileGram server (generated 2026-10-04).
+    // AlightGram's MTProto server RSA key. Must pair with the private key deployed
+    // on the AlightGram server (generated 2026-10-04).
     static final String OWPENGRAM_RSA_KEY =
         "-----BEGIN RSA PUBLIC KEY-----\n" +
         "MIIBCgKCAQEA6L024qarZ6UI2b8JFVuptOt1SuHlclW275cx/ax74Lt7J7HkC/lw\n" +
@@ -65,8 +65,8 @@ public class OwpengramServers {
     public static OwpengramServer owpengramServer() {
         OwpengramServer s = new OwpengramServer();
         s.id                 = ID_OWPENGRAM;
-        s.name               = "ExileGram";
-        s.description        = "ExileGram server.";
+        s.name               = "AlightGram";
+        s.description        = "AlightGram server.";
         s.host               = DEFAULT_HOST;
         s.port               = DEFAULT_PORT;
         s.isOfficial         = true;
@@ -238,7 +238,7 @@ public class OwpengramServers {
     /**
      * Whether the account's current server is the official Telegram network.
      * Used to hide Telegram-specific help entries (Ask a Question, Telegram FAQ /
-     * Features, Privacy Policy) on ExileGram and other servers, where they don't apply.
+     * Features, Privacy Policy) on AlightGram and other servers, where they don't apply.
      */
     public static boolean serverIsOfficialTelegram(int accountNum) {
         OwpengramServer s = getServerForAccount(accountNum);
@@ -262,7 +262,7 @@ public class OwpengramServers {
 
     /**
      * Endpoint text shown in the server UI (picker row, info header, unreachable
-     * dialog). The built-in ExileGram server is shown by its public domain so the
+     * dialog). The built-in AlightGram server is shown by its public domain so the
      * raw IP is never displayed; custom and Telegram servers keep their real host.
      */
     public static String displayEndpoint(OwpengramServer s) {

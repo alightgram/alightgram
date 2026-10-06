@@ -1,4 +1,4 @@
-name: ExileGram build
+name: AlightGram build
 
 on:
   push:
@@ -70,11 +70,11 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p artifact
-          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/ExileGram.apk"
+          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk "artifact/AlightGram.apk"
           ls -la artifact/
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ExileGram-APK
-          path: artifact/ExileGram.apk
+          name: AlightGram-APK
+          path: artifact/AlightGram.apk
           if-no-files-found: error

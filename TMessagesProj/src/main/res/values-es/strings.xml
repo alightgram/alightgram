@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">ExileGram</string>
-    <string name="AppNameBeta">ExileGram Beta</string>
+    <string name="AppName">AlightGram</string>
+    <string name="AppNameBeta">AlightGram Beta</string>
     <string name="LanguageName">Español</string>
     <string name="English">Inglés</string>
     <string name="LanguageNameInEnglish">Spanish</string>
