@@ -37,14 +37,14 @@ public class OwpengramServers {
     // ExileGram's MTProto server RSA key. Must pair with the private key deployed
     // on the ExileGram server (generated 2026-10-04).
     static final String OWPENGRAM_RSA_KEY =
-        "-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEAzhCRN1xH9ROUPfv9r87huxTbRD77IT5PKHJ5wRDr7iTynImsf2cZ
-EePRBcPxaS9DpRxpjhou16qckEfWxJMPb8oLD8Wx/qxXPIKyW3QN8BmQMCWD9ea5
-oxuz0zFgswv02hU//CvZpiSjJqKvTru3QY5UqehvcUUT6OQrz6zkmD0ztc6OmFfQ
-nq4r5W65YS3y6VZYiKr0QOIa3/etncULFGHYdgkLR/7gCGT8yQCo0m1DP7v4JIl6
-kbzuexNAKml+J+h6WNWQvbJ+Uj+LlGLgYDmAmFGx2LEhrcOGSOf7wKxKiHJ2nWeM
-RtRspcLnasNEHU/y3McnXvYj3Fx0cnny6wIDAQAB
------END RSA PUBLIC KEY-----";
+        "-----BEGIN RSA PUBLIC KEY-----\n" +
+        "MIIBCgKCAQEA6L024qarZ6UI2b8JFVuptOt1SuHlclW275cx/ax74Lt7J7HkC/lw\n" +
+        "kezwP0SBu9uqpCn9ZOvaP6bKS7x1oX65jHfFBcH6cLlt9w/ko7Al6noQwdSKAl7I\n" +
+        "TVCX3bhw3DVh6hQ0T2igmlHn/vs2HpApn+dMQStNVGrNrZE9ynFMe/5lt6mwOBo0\n" +
+        "1FYC6U2Vrc8SfK17ROjSwLGC48Y4XNU2Hxqj/FkmO38Gf8QLuZOBDwGGS433sz5v\n" +
+        "+ehP7GIG38EukP50cAFJeb6X8gv+V49PqZuFzlmtMKUSDsNiNVgd4sCBAZXxnYwM\n" +
+        "tKDkNRd8aTp1goJ8gcqt2Ljv0aZDqthWtwIDAQAB\n" +
+        "-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
 
