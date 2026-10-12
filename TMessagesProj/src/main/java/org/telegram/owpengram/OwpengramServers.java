@@ -44,7 +44,6 @@ public class OwpengramServers {
         "1FQAce9oZfcM40GHyFVFWNZTcbEfJeBWymu9is5dbyw7hTs96gipCVs6cn1JU5h/\n" +
         "gSs8ya/MFoAblPCdzByidxCopDsKsUP53rTCsoLjBhOQtvQglQKZU3AL1cSzFYar\n" +
         "+g7Rmv46SyUby3CNdolFHBI/v+ekH6qa3QIDAQAB\n" +
-        "-----END RSA PUBLIC KEY-----\n"
         "-----END RSA PUBLIC KEY-----";
     // fingerprint == 0 -> native layer derives it from the PEM (see ConnectionsManager::applyServerConfig).
     static final long OWPENGRAM_RSA_FINGERPRINT = 0;
