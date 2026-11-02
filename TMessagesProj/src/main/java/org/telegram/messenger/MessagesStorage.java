@@ -3422,7 +3422,7 @@ public class MessagesStorage extends BaseController {
                             }
                         }
                         if (secretChatsMap != null) {
-                            for (LinkedHashMap.Entry<Integer, Long> entry : secretChatsMap.entrySet()) {
+                            for (Map.Entry<Integer, Long> entry : secretChatsMap.entrySet()) {
                                 filter.pinnedDialogs.put(entry.getValue(), filter.pinnedDialogs.size());
                             }
                         }
