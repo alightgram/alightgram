@@ -245,7 +245,7 @@ def getProps(String propName) {
         return "";
     }
 }
-apply plugin: 'com.google.gms.google-services'
+// AlightGram: google-services is applied only in the app module (library namespace doesn't match the json)
 
 task checkVisibility {
     doFirst {
