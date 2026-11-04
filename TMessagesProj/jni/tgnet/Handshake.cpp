@@ -383,16 +383,17 @@ void Handshake::processHandshakeResponse_resPQ(TLObject *message, int64_t messag
                                                   "5+bfo3Nhmcyvk5ftB0WkJ9z6bNZ7yxrP8wIDAQAB\n"
                                                   "-----END RSA PUBLIC KEY-----");
                     serverPublicKeysFingerprints.push_back(0xd09d1d85de64fd85);
-                    // AlightGram: private server (2.27.200.20) RSA public key
+                    // AlightGram: private server (2.27.200.20) current RSA public key
+                    // fingerprint computed by gramsrv's gotd RSAFingerprint()
                     serverPublicKeys.emplace_back("-----BEGIN RSA PUBLIC KEY-----\n"
-                                                  "MIIBCgKCAQEAoQO9Tja9Pa9eT8EDvgHy4lLkrjqLCugb1qnvUCA2mfskyn9/X514\n"
-                                                  "yFlzkd5oF6EDttM8WzHsDS2XRZ60nRbZ5jgyBa/KJ3BMET7AyXuPi7w1EP4XBrcO\n"
-                                                  "/gRrxydvCWrAjZub0r8PvFqOG9d4nYKBLq+xnQeonPX5uRrq6rqheSn47IW4QB55\n"
-                                                  "9yzwL3Pto+zuh/hk1y7yT4tW5goPmpqepKYHq6dy5CkvfxBqlUcEJjtEaVkqVLQe\n"
-                                                  "iu1HRqS5KhSMRvzBe1JxV2a934scTKs70J1bmumw8T7Hoya9XN4fGd9Rfnp1DZMb\n"
-                                                  "+fGXcrMmDSt6zhiAbWNu4JMKs5dRHuQKCQIDAQAB\n"
+                                                  "MIIBCgKCAQEA38NCnNFUz433Jamh7CR3GzoQdEHOnqYFmhJwGtH00SZrWxBzgbnZ\n"
+                                                  "xiOyd8lihk6V/9pzkZW02BhVzEhap0ZM5KR1qCC21k2t6BBrYsREp7w8AcZUqyjQ\n"
+                                                  "21FoMm7LeApP4MIUZW8lIMYQ7gg4bW24xqthaefRAhlYyJ/FF40+GMGeAEC6VVMj\n"
+                                                  "Lr06Jli1Loyyy/9t6ed8iW5dw6MBOrVgOBao/C5XIiTU/zOUhA1B3Wdqp60peY2d\n"
+                                                  "2Ef0l55NADIxQRt5pzevr7e87p8cIevHheMSoJlNCTjFcpt0fAhkGY2HmggJ1CT4\n"
+                                                  "/Gx2EOGKKZ+tStzHBLDCEdvxIEmhcuRJbwIDAQAB\n"
                                                   "-----END RSA PUBLIC KEY-----");
-                    serverPublicKeysFingerprints.push_back(0x212e88068a875b76ULL); // AlightGram private server key
+                    serverPublicKeysFingerprints.push_back(0x3dbba77390e66553ULL); // AlightGram private server key
                 }
             }
 
