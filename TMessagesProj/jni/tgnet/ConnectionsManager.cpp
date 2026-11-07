@@ -115,7 +115,7 @@ ConnectionsManager::ConnectionsManager(int32_t instance) {
     }
 
     sizeCalculator = new NativeByteBuffer(true);
-etworkBuffer = new NativeByteBuffer((uint32_t) READ_BUFFER_SIZE);
+    networkBuffer = new NativeByteBuffer((uint32_t) READ_BUFFER_SIZE);
     if (networkBuffer == nullptr) {
         if (LOGS_ENABLED) DEBUG_E("unable to allocate read buffer");
         exit(1);
@@ -235,7 +235,7 @@ void ConnectionsManager::select() {
             lastPushPingTime = now;
             uint8_t offset;
             RAND_bytes(&offset, 1);
-extPingTimeOffset = 60000 * 3 + (offset % 40) - 20;
+            nextPingTimeOffset = 60000 * 3 + (offset % 40) - 20;
             if (datacenter != nullptr) {
                 sendPing(datacenter, true);
             }
@@ -269,7 +269,7 @@ extPingTimeOffset = 60000 * 3 + (offset % 40) - 20;
                     dc.second->suspendConnections(false);
                 }
             }
-etworkPaused = true;
+            networkPaused = true;
             return;
         } else {
             lastPauseTime = now;
@@ -277,7 +277,7 @@ etworkPaused = true;
         }
     }
     if (networkPaused) {
-etworkPaused = false;
+        networkPaused = false;
         for (auto & dc : datacenters) {
             if (dc.second->isHandshaking(false)) {
                 dc.second->createGenericConnection()->connect();
@@ -353,11 +353,11 @@ void *ConnectionsManager::ThreadProc(void *data) {
         Datacenter *datacenter = networkManager->getDatacenterWithId(networkManager->currentDatacenterId);
         if (datacenter != nullptr) {
             datacenter->createPushConnection()->setSessionId(networkManager->pushSessionId);
-etworkManager->sendPing(datacenter, true);
+            networkManager->sendPing(datacenter, true);
         }
     }
     do {
-etworkManager->select();
+        networkManager->select();
     } while (!done);
     return nullptr;
 }
@@ -1714,11 +1714,11 @@ void ConnectionsManager::processServerResponse(TLObject *message, int64_t messag
             auto request = new TL_msg_resend_req();
             request->msg_ids.push_back(response->answer_msg_id);
             auto networkMessage = new NetworkMessage();
-etworkMessage->message = std::make_unique<TL_message>();
-etworkMessage->message->msg_id = generateMessageId();
-etworkMessage->message->bytes = request->getObjectSize();
-etworkMessage->message->body = std::unique_ptr<TLObject>(request);
-etworkMessage->message->seqno = connection->generateMessageSeqNo(false);
+            networkMessage->message = std::make_unique<TL_message>();
+            networkMessage->message->msg_id = generateMessageId();
+            networkMessage->message->bytes = request->getObjectSize();
+            networkMessage->message->body = std::unique_ptr<TLObject>(request);
+            networkMessage->message->seqno = connection->generateMessageSeqNo(false);
             resendRequests[networkMessage->message->msg_id] = response->answer_msg_id;
 
             std::vector<std::unique_ptr<NetworkMessage>> array;
@@ -1794,11 +1794,11 @@ void ConnectionsManager::sendPing(Datacenter *datacenter, bool usePushConnection
     }
 
     auto networkMessage = new NetworkMessage();
-etworkMessage->message = std::make_unique<TL_message>();
-etworkMessage->message->msg_id = generateMessageId();
-etworkMessage->message->bytes = request->getObjectSize();
-etworkMessage->message->body = std::unique_ptr<TLObject>(request);
-etworkMessage->message->seqno = connection->generateMessageSeqNo(false);
+    networkMessage->message = std::make_unique<TL_message>();
+    networkMessage->message->msg_id = generateMessageId();
+    networkMessage->message->bytes = request->getObjectSize();
+    networkMessage->message->body = std::unique_ptr<TLObject>(request);
+    networkMessage->message->seqno = connection->generateMessageSeqNo(false);
 
     std::vector<std::unique_ptr<NetworkMessage>> array;
     array.push_back(std::unique_ptr<NetworkMessage>(networkMessage));
@@ -1821,59 +1821,49 @@ void ConnectionsManager::initDatacenters() {
     if (!testBackend) {
         if (datacenters.find(1) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 1);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[1] = datacenter;
         }
 
         if (datacenters.find(2) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 2);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            datacenter->addAddressAndPort("2.27.200.20", 443, 0, "");
-            
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[2] = datacenter;
         }
 
         if (datacenters.find(3) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 3);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[3] = datacenter;
         }
 
         if (datacenters.find(4) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 4);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[4] = datacenter;
         }
 
         if (datacenters.find(5) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 5);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[5] = datacenter;
         }
     } else {
         if (datacenters.find(1) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 1);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[1] = datacenter;
         }
 
         if (datacenters.find(2) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 2);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[2] = datacenter;
         }
 
         if (datacenters.find(3) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 3);
-            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, "");
-            
+            datacenter->addAddressAndPort("2.27.200.20", 2398, 0, ""); // AlightGram: server port
             datacenters[3] = datacenter;
         }
     }
@@ -2452,7 +2442,7 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
     genericMediaMessagesToDatacenters.clear();
     tempMessagesToDatacenters.clear();
     unknownDatacenterIds.clear();
-eededDatacenters.clear();
+    neededDatacenters.clear();
     unauthorizedDatacenters.clear();
     downloadRunningRequestCount.clear();
     downloadCancelRunningRequestCount.clear();
@@ -2564,7 +2554,7 @@ eededDatacenters.clear();
             if (!requestDatacenter->hasAuthKey(request->connectionType, canUseUnboundKey)) {
                 std::pair<Datacenter *, ConnectionType> pair = std::make_pair(requestDatacenter, request->connectionType);
                 if (std::find(neededDatacenters.begin(), neededDatacenters.end(), pair) == neededDatacenters.end()) {
-eededDatacenters.push_back(pair);
+                    neededDatacenters.push_back(pair);
                 }
                 iter++;
                 continue;
@@ -2665,15 +2655,15 @@ eededDatacenters.push_back(pair);
             request->startTimeMillis = currentTimeMillis;
 
             auto networkMessage = new NetworkMessage();
-etworkMessage->forceContainer = request->isResending;
-etworkMessage->message = std::make_unique<TL_message>();
-etworkMessage->message->msg_id = request->messageId;
-etworkMessage->message->bytes = request->serializedLength;
-etworkMessage->message->outgoingBody = request->getRpcRequest();
-etworkMessage->message->seqno = request->messageSeqNo;
-etworkMessage->requestId = request->requestToken;
-etworkMessage->invokeAfter = (request->requestFlags & RequestFlagInvokeAfter) != 0 && (request->requestFlags & RequestFlagResendAfter) == 0;
-etworkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) != 0;
+            networkMessage->forceContainer = request->isResending;
+            networkMessage->message = std::make_unique<TL_message>();
+            networkMessage->message->msg_id = request->messageId;
+            networkMessage->message->bytes = request->serializedLength;
+            networkMessage->message->outgoingBody = request->getRpcRequest();
+            networkMessage->message->seqno = request->messageSeqNo;
+            networkMessage->requestId = request->requestToken;
+            networkMessage->invokeAfter = (request->requestFlags & RequestFlagInvokeAfter) != 0 && (request->requestFlags & RequestFlagResendAfter) == 0;
+            networkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) != 0;
 
             request->connectionToken = connection->getConnectionToken();
             switch (requestConnectionType) {
@@ -2730,11 +2720,11 @@ etworkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) 
                 request->session_id = *iter;
 
                 auto networkMessage = new NetworkMessage();
-etworkMessage->message = std::make_unique<TL_message>();
-etworkMessage->message->msg_id = generateMessageId();
-etworkMessage->message->bytes = request->getObjectSize();
-etworkMessage->message->body = std::unique_ptr<TLObject>(request);
-etworkMessage->message->seqno = genericConnection->generateMessageSeqNo(false);
+                networkMessage->message = std::make_unique<TL_message>();
+                networkMessage->message->msg_id = generateMessageId();
+                networkMessage->message->bytes = request->getObjectSize();
+                networkMessage->message->body = std::unique_ptr<TLObject>(request);
+                networkMessage->message->seqno = genericConnection->generateMessageSeqNo(false);
                 addMessageToDatacenter(defaultDatacenter->getDatacenterId(), networkMessage, genericMessagesToDatacenters);
             }
             sessionsToDestroy.erase(iter);
@@ -2824,7 +2814,7 @@ etworkMessage->message->seqno = genericConnection->generateMessageSeqNo(false);
             if (!requestDatacenter->hasAuthKey(request->connectionType, canUseUnboundKey)) {
                 std::pair<Datacenter *, ConnectionType> pair = std::make_pair(requestDatacenter, request->connectionType);
                 if (std::find(neededDatacenters.begin(), neededDatacenters.end(), pair) == neededDatacenters.end()) {
-eededDatacenters.push_back(pair);
+                    neededDatacenters.push_back(pair);
                 }
                 if (LOGS_ENABLED)
                     DEBUG_D("skip queue, token = %d: no authkey for dc", request->requestToken);
@@ -2959,15 +2949,15 @@ eededDatacenters.push_back(pair);
         request->connectionToken = connection->getConnectionToken();
 
         auto networkMessage = new NetworkMessage();
-etworkMessage->message = std::make_unique<TL_message>();
-etworkMessage->forceContainer = request->isResending;
-etworkMessage->message->msg_id = request->messageId;
-etworkMessage->message->bytes = request->serializedLength;
-etworkMessage->message->outgoingBody = request->getRpcRequest();
-etworkMessage->message->seqno = request->messageSeqNo;
-etworkMessage->requestId = request->requestToken;
-etworkMessage->invokeAfter = (request->requestFlags & RequestFlagInvokeAfter) != 0 && (request->requestFlags & RequestFlagResendAfter) == 0;
-etworkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) != 0;
+        networkMessage->message = std::make_unique<TL_message>();
+        networkMessage->forceContainer = request->isResending;
+        networkMessage->message->msg_id = request->messageId;
+        networkMessage->message->bytes = request->serializedLength;
+        networkMessage->message->outgoingBody = request->getRpcRequest();
+        networkMessage->message->seqno = request->messageSeqNo;
+        networkMessage->requestId = request->requestToken;
+        networkMessage->invokeAfter = (request->requestFlags & RequestFlagInvokeAfter) != 0 && (request->requestFlags & RequestFlagResendAfter) == 0;
+        networkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) != 0;
 
         if (!hasPendingRequestsForConnection(connection)) {
             connection->resetLastEventTime();
@@ -3042,7 +3032,7 @@ etworkMessage->needQuickAck = (request->requestFlags & RequestFlagNeedQuickAck) 
             for (uint32_t b = 0; b < count; b++) {
                 NetworkMessage *networkMessage = array[b].get();
                 if (networkMessage->needQuickAck) {
-eedQuickAck = true;
+                    needQuickAck = true;
                 }
                 if (networkMessage->invokeAfter) {
                     if (!scannedPreviousRequests) {
@@ -3700,7 +3690,7 @@ void ConnectionsManager::init(uint32_t version, int32_t layer, int32_t apiId, st
     currentLogPath = logPath;
     pushConnectionEnabled = enablePushConnection;
     currentNetworkType = networkType;
-etworkAvailable = hasNetwork;
+    networkAvailable = hasNetwork;
     currentPerformanceClass = performanceClass;
     if (isPaused) {
         lastPauseTime = getCurrentTimeMonotonicMillis();
@@ -3723,13 +3713,13 @@ etworkAvailable = hasNetwork;
         for (auto & datacenter : datacenters) {
             datacenter.second->resetInitVersion();
         }
-eedLoadConfig = true;
+        needLoadConfig = true;
         saveConfig();
     }
     if (!needLoadConfig && currentUserId != 0) {
         Datacenter *datacenter = getDatacenterWithId(DEFAULT_DATACENTER_ID);
         if (datacenter != nullptr && datacenter->lastInitVersion != currentVersion) {
-eedLoadConfig = true;
+            needLoadConfig = true;
         }
     }
 
@@ -3834,19 +3824,19 @@ void ConnectionsManager::resumeNetwork(bool partial) {
             if (networkPaused) {
                 lastMonotonicPauseTime = lastPauseTime = getCurrentTimeMonotonicMillis();
                 lastSystemPauseTime = getCurrentTime();
-etworkPaused = false;
+                networkPaused = false;
                 if (LOGS_ENABLED) DEBUG_D("wakeup network in background account%u", instanceNum);
             } else if (lastPauseTime != 0) {
                 lastMonotonicPauseTime = lastPauseTime = getCurrentTimeMonotonicMillis();
                 lastSystemPauseTime = getCurrentTime();
-etworkPaused = false;
+                networkPaused = false;
                 if (LOGS_ENABLED) DEBUG_D("reset sleep timeout account%u", instanceNum);
             }
         } else {
             lastPauseTime = 0;
             lastMonotonicPauseTime = 0;
             lastSystemPauseTime = 0;
-etworkPaused = false;
+            networkPaused = false;
             if (LOGS_ENABLED) DEBUG_D("wakeup network account%u", instanceNum);
         }
         if (!networkPaused) {
@@ -3872,9 +3862,9 @@ void ConnectionsManager::pauseNetwork() {
 
 void ConnectionsManager::setNetworkAvailable(bool value, int32_t type, bool slow) {
     scheduleTask([&, value, type, slow] {
-etworkAvailable = value;
+        networkAvailable = value;
         currentNetworkType = type;
-etworkSlow = slow;
+        networkSlow = slow;
         if (!networkAvailable) {
             connectionState = ConnectionStateWaitingForNetwork;
         } else {
