@@ -245,7 +245,7 @@ def getProps(String propName) {
         return "";
     }
 }
-apply plugin: 'com.google.gms.google-services'
+// AlightGram: google-services only in app module
 
 task checkVisibility {
     doFirst {
