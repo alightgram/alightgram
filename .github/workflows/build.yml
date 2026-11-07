@@ -1,0 +1,66 @@
+name: Build AlightGram APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, main]
+
+jobs:
+  build:
+    name: Build release APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+      - name: Checkout sources (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Accept licenses and install NDK, CMake and platform packages
+        run: |
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.2.12479018" "cmake;3.22.1" "platforms;android-36" "build-tools;36.0.0"
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android/sdk/ndk/* || true
+          sudo rm -rf /opt/hostedtoolcache/CodeQL || true
+          sudo docker image prune -af || true
+          df -h /
+
+      - name: Build release APK (afat, all ABIs)
+        run: ./gradlew :TMessagesProj_App:assembleAfatRelease --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: |
+          mkdir -p output
+          cp TMessagesProj_App/build/outputs/apk/afat/release/*.apk output/AlightGram-v${{ github.run_number }}.apk
+          ls -la output/
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlightGram-APK-${{ github.run_number }}
+          path: output/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload mapping (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlightGram-mapping-${{ github.run_number }}
+          path: TMessagesProj_App/build/outputs/mapping/afatRelease/
+          if-no-files-found: ignore
+          retention-days: 30
