@@ -98,6 +98,19 @@ public final class CustomHooks {
     }
 
     /**
+     * Scalar variant of {@link #adjustRoundRadius(int[])} for views that store
+     * a single radius value (e.g. the profile page avatar clip path), so the
+     * frame shape applies everywhere — own profile and other users' profiles.
+     */
+    public static int adjustRoundRadiusScalar(int radius) {
+        if (radius <= 0) {
+            return radius;
+        }
+        int[] r = adjustRoundRadius(new int[]{radius, radius, radius, radius});
+        return r == null ? radius : r[0];
+    }
+
+    /**
      * Called from LaunchActivity.onCreate (after content view setup).
      * Installs the snowfall overlay on the window's decor view.
      */

@@ -1026,6 +1026,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         public void setRoundRadiusForExpand(int value) {
+            value = org.telegram.owpengram.CustomHooks.adjustRoundRadiusScalar(value); // AlightGram: profile frame shape
             if (!blurEnabled) {
                 setRoundRadius(value);
             } else {
@@ -1041,6 +1042,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         public void setRoundRadiusCollapse(int roundRadiusCollapse) {
+            roundRadiusCollapse = org.telegram.owpengram.CustomHooks.adjustRoundRadiusScalar(roundRadiusCollapse); // AlightGram: profile frame shape
             this.isMetaballWorking = true;
             int old = this.roundRadiusCollapse;
             this.roundRadiusCollapse = roundRadiusCollapse;

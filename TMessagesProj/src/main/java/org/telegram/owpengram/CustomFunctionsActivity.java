@@ -1,9 +1,7 @@
 package org.telegram.owpengram;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.View;
@@ -18,19 +16,26 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.LayoutHelper;
 
 /**
- * «Кастомные функции» screen:
- *  - Card 1: profile frame shape with a live avatar preview and a slider;
- *  - Card 2: snowflakes switch, size and speed sliders.
+ * «Кастомные функции» screen with two tabs:
+ *  - «Смена рамки»: profile frame shape with a live avatar preview and a slider;
+ *  - «Снежинки»: snowfall switch, size and speed sliders.
  */
 public class CustomFunctionsActivity extends BaseFragment {
 
     private static final int SHAPE_CIRCLE = 100;
     private static final int SHAPE_SQUARE = 0;
+
+    private static final int TAB_FRAME = 0;
+    private static final int TAB_SNOW = 1;
+
+    private TextView tabFrameButton;
+    private TextView tabSnowButton;
+    private FrameLayout panelFrame;
+    private FrameLayout panelSnow;
 
     private AvatarPreviewView avatarPreview;
     private CustomSliderView shapeSlider;
@@ -38,6 +43,9 @@ public class CustomFunctionsActivity extends BaseFragment {
     private CustomSliderView snowSpeedSlider;
     private TextCheckCell snowToggleCell;
     private TextView shapeStateText;
+
+    private int accentColor;
+    private int whiteBg;
 
     @Override
     public View createView(Context context) {
@@ -56,8 +64,8 @@ public class CustomFunctionsActivity extends BaseFragment {
         });
 
         int grayBg = getThemedColor(Theme.key_windowBackgroundGray);
-        int whiteBg = getThemedColor(Theme.key_windowBackgroundWhite);
-        int accent = getThemedColor(Theme.key_windowBackgroundWhiteBlueText);
+        whiteBg = getThemedColor(Theme.key_windowBackgroundWhite);
+        accentColor = getThemedColor(Theme.key_windowBackgroundWhiteBlueText);
         int trackGray = getThemedColor(Theme.key_switch2Track);
         int blackText = getThemedColor(Theme.key_windowBackgroundWhiteBlackText);
         int grayText = getThemedColor(Theme.key_windowBackgroundWhiteGrayText);
@@ -74,42 +82,63 @@ public class CustomFunctionsActivity extends BaseFragment {
         scrollView.addView(content, new ScrollView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        // ============ Card 1: «Кастомные функции» — profile frame ============
-        LinearLayout card1 = makeCard(context, whiteBg);
-        content.addView(card1, makeCardLp());
-        content.addView(makeSpacing(context));
+        // ============ Tabs: «Смена рамки» / «Снежинки» ============
+        LinearLayout segmented = new LinearLayout(context);
+        segmented.setOrientation(LinearLayout.HORIZONTAL);
+        GradientDrawable segmentedBg = new GradientDrawable();
+        segmentedBg.setCornerRadius(AndroidUtilities.dp(14));
+        segmentedBg.setColor(whiteBg);
+        segmented.setBackground(segmentedBg);
+        segmented.setPadding(AndroidUtilities.dp(3), AndroidUtilities.dp(3), AndroidUtilities.dp(3), AndroidUtilities.dp(3));
 
-        TextView cardTitle = new TextView(context);
-        cardTitle.setText("Кастомные функции");
-        cardTitle.setTextSize(18);
-        cardTitle.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-        cardTitle.setTextColor(blackText);
-        cardTitle.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(14), AndroidUtilities.dp(20), 0);
-        card1.addView(cardTitle, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        tabFrameButton = makeTabButton(context, "Смена рамки");
+        tabSnowButton = makeTabButton(context, "Снежинки");
+        segmented.addView(tabFrameButton, LayoutHelper.createLinear(0, AndroidUtilities.dp(42), 1.0f));
+        segmented.addView(tabSnowButton, LayoutHelper.createLinear(0, AndroidUtilities.dp(42), 1.0f));
+        content.addView(segmented, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 12, 8, 12, 8));
 
-        TextView cardSubtitle = new TextView(context);
-        cardSubtitle.setText("Настройте внешний вид своего профиля");
-        cardSubtitle.setTextSize(13);
-        cardSubtitle.setTextColor(grayText);
-        cardSubtitle.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(4), AndroidUtilities.dp(20), 0);
-        card1.addView(cardSubtitle, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        tabFrameButton.setOnClickListener(v -> selectTab(TAB_FRAME));
+        tabSnowButton.setOnClickListener(v -> selectTab(TAB_SNOW));
+
+        // ============ Panels ============
+        FrameLayout panelsHolder = new FrameLayout(context);
+        panelsHolder.setBackgroundColor(Color.TRANSPARENT);
+        content.addView(panelsHolder, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // ---- Panel 1: frame shape ----
+        panelFrame = new FrameLayout(context);
+        LinearLayout frameContent = new LinearLayout(context);
+        frameContent.setOrientation(LinearLayout.VERTICAL);
+        panelFrame.addView(frameContent, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        LinearLayout cardFrame = makeCard(context, whiteBg);
+        frameContent.addView(cardFrame, makeCardLp());
+        frameContent.addView(makeSpacing(context, 8));
+
+        TextView frameHint = new TextView(context);
+        frameHint.setText("Форма применяется ко всем аватаркам: в чатах, в списке чатов и в профиле.");
+        frameHint.setTextSize(13);
+        frameHint.setTextColor(grayText);
+        frameHint.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
+        cardFrame.addView(frameHint, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         FrameLayout previewHolder = new FrameLayout(context);
         avatarPreview = new AvatarPreviewView(context, currentAccount);
         previewHolder.addView(avatarPreview, LayoutHelper.createFrame(120, 120, Gravity.CENTER_HORIZONTAL, 0, 24, 0, 24));
-        card1.addView(previewHolder, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        cardFrame.addView(previewHolder, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         shapeStateText = new TextView(context);
         shapeStateText.setTextSize(14);
-        shapeStateText.setTextColor(accent);
+        shapeStateText.setTextColor(accentColor);
         shapeStateText.setGravity(Gravity.CENTER);
         shapeStateText.setText(describeShape(CustomFeatures.frameShape));
         shapeStateText.setPadding(0, 0, 0, AndroidUtilities.dp(6));
-        card1.addView(shapeStateText, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        cardFrame.addView(shapeStateText, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         shapeSlider = new CustomSliderView(context);
         shapeSlider.setTitle("Форма рамки");
-        shapeSlider.setColors(trackGray, accent, whiteBg, blackText, accent);
+        shapeSlider.setColors(trackGray, accentColor, whiteBg, blackText, accentColor);
         shapeSlider.setValue(CustomFeatures.frameShape, false);
         shapeSlider.setValueText(shapePercentText(CustomFeatures.frameShape));
         shapeSlider.setCallback((view, value, fromUser, finalValue) -> {
@@ -118,17 +147,21 @@ public class CustomFunctionsActivity extends BaseFragment {
             shapeSlider.setValueText(shapePercentText(value));
             avatarPreview.setShapePercent(value, fromUser);
         });
-        card1.addView(shapeSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0, 0, 10));
+        cardFrame.addView(shapeSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0, 0, 10));
 
-        // ============ Snowflakes header ============
-        HeaderCell snowHeader = new HeaderCell(context);
-        snowHeader.setText("Снежинки");
-        content.addView(snowHeader, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 12, 0, 12, 0));
+        panelsHolder.addView(panelFrame, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        // ============ Card 2: snowflakes ============
-        LinearLayout card2 = makeCard(context, whiteBg);
-        content.addView(card2, makeCardLp());
-        content.addView(makeSpacing(context));
+        // ---- Panel 2: snowflakes ----
+        panelSnow = new FrameLayout(context);
+        LinearLayout snowContent = new LinearLayout(context);
+        snowContent.setOrientation(LinearLayout.VERTICAL);
+        panelSnow.addView(snowContent, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        LinearLayout cardSnow = makeCard(context, whiteBg);
+        snowContent.addView(cardSnow, makeCardLp());
+        snowContent.addView(makeSpacing(context, 8));
 
         snowToggleCell = new TextCheckCell(context);
         snowToggleCell.setHeight(AndroidUtilities.dp(50));
@@ -140,11 +173,11 @@ public class CustomFunctionsActivity extends BaseFragment {
             snowToggleCell.setChecked(newValue);
             notifyOverlay();
         });
-        card2.addView(snowToggleCell, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(50)));
+        cardSnow.addView(snowToggleCell, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(50)));
 
         snowSizeSlider = new CustomSliderView(context);
         snowSizeSlider.setTitle("Размер снежинок");
-        snowSizeSlider.setColors(trackGray, accent, whiteBg, blackText, accent);
+        snowSizeSlider.setColors(trackGray, accentColor, whiteBg, blackText, accentColor);
         snowSizeSlider.setValue(CustomFeatures.snowSizeToPosition(CustomFeatures.snowSize), false);
         snowSizeSlider.setValueText(snowFactorText(CustomFeatures.snowSize));
         snowSizeSlider.setCallback((view, value, fromUser, finalValue) -> {
@@ -152,11 +185,11 @@ public class CustomFunctionsActivity extends BaseFragment {
             snowSizeSlider.setValueText(snowFactorText(CustomFeatures.snowSize));
             notifyOverlay();
         });
-        card2.addView(snowSizeSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        cardSnow.addView(snowSizeSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         snowSpeedSlider = new CustomSliderView(context);
         snowSpeedSlider.setTitle("Скорость снежинок");
-        snowSpeedSlider.setColors(trackGray, accent, whiteBg, blackText, accent);
+        snowSpeedSlider.setColors(trackGray, accentColor, whiteBg, blackText, accentColor);
         snowSpeedSlider.setValue(CustomFeatures.snowSpeedToPosition(CustomFeatures.snowSpeed), false);
         snowSpeedSlider.setValueText(snowFactorText(CustomFeatures.snowSpeed));
         snowSpeedSlider.setCallback((view, value, fromUser, finalValue) -> {
@@ -164,17 +197,57 @@ public class CustomFunctionsActivity extends BaseFragment {
             snowSpeedSlider.setValueText(snowFactorText(CustomFeatures.snowSpeed));
             notifyOverlay();
         });
-        card2.addView(snowSpeedSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        cardSnow.addView(snowSpeedSlider, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         TextView snowInfo = new TextView(context);
-        snowInfo.setText("Падающие белые точки работают во всех экранах приложения: чаты, настройки, галерея и другие.");
+        snowInfo.setText("Падающие белые снежинки работают во всех экранах приложения: чаты, настройки, галерея и другие.");
         snowInfo.setTextSize(13);
         snowInfo.setTextColor(grayText);
         snowInfo.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(2), AndroidUtilities.dp(20), AndroidUtilities.dp(16));
-        card2.addView(snowInfo, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        cardSnow.addView(snowInfo, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        panelsHolder.addView(panelSnow, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        selectTab(TAB_FRAME);
 
         fragmentView = rootFrame;
         return rootFrame;
+    }
+
+    private TextView makeTabButton(Context context, String title) {
+        TextView b = new TextView(context);
+        b.setText(title);
+        b.setTextSize(14);
+        b.setGravity(Gravity.CENTER);
+        b.setAllCaps(false);
+        b.setSingleLine(true);
+        return b;
+    }
+
+    private void selectTab(int tab) {
+        GradientDrawable active = new GradientDrawable();
+        active.setCornerRadius(AndroidUtilities.dp(12));
+        active.setColor(accentColor);
+        GradientDrawable idle = new GradientDrawable();
+        idle.setCornerRadius(AndroidUtilities.dp(12));
+        idle.setColor(Color.TRANSPARENT);
+
+        if (tab == TAB_FRAME) {
+            tabFrameButton.setBackground(active);
+            tabFrameButton.setTextColor(Color.WHITE);
+            tabSnowButton.setBackground(idle);
+            tabSnowButton.setTextColor(accentColor);
+            panelFrame.setVisibility(View.VISIBLE);
+            panelSnow.setVisibility(View.GONE);
+        } else {
+            tabSnowButton.setBackground(active);
+            tabSnowButton.setTextColor(Color.WHITE);
+            tabFrameButton.setBackground(idle);
+            tabFrameButton.setTextColor(accentColor);
+            panelFrame.setVisibility(View.GONE);
+            panelSnow.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -232,9 +305,10 @@ public class CustomFunctionsActivity extends BaseFragment {
         return LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 12, 4, 12, 0);
     }
 
-    private View makeSpacing(Context context) {
+    private View makeSpacing(Context context, int heightDp) {
         View v = new View(context);
         v.setBackgroundColor(Color.TRANSPARENT);
+        v.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(heightDp)));
         return v;
     }
 

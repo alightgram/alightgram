@@ -30,9 +30,6 @@ jobs:
           "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.2.12479018" "cmake;3.22.1" "platforms;android-36" "build-tools;36.0.0"
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
       - name: Free up disk space
         run: |
           sudo rm -rf /usr/local/lib/android/sdk/ndk/* || true
@@ -40,8 +37,24 @@ jobs:
           sudo docker image prune -af || true
           df -h /
 
+      - name: Install Gradle 8.13 (mirror, bypass wrapper)
+        run: |
+          set -e
+          cd "$RUNNER_TEMP"
+          for U in "https://mirrors.cloud.tencent.com/gradle/gradle-8.13-bin.zip" \
+                   "https://mirrors.huaweicloud.com/gradle/gradle-8.13-bin.zip" \
+                   "https://services.gradle.org/distributions/gradle-8.13-bin.zip"; do
+            echo "Trying $U"
+            curl -fL --retry 4 --retry-delay 8 --connect-timeout 20 -o gradle.zip "$U" && break
+            rm -f gradle.zip
+          done
+          test -s gradle.zip || { echo "All gradle mirrors failed"; exit 1; }
+          unzip -q gradle.zip
+          echo "$RUNNER_TEMP/gradle-8.13/bin" >> "$GITHUB_PATH"
+          gradle --version | head -5
+
       - name: Build release APK (afat, all ABIs)
-        run: ./gradlew :TMessagesProj_App:assembleAfatRelease --no-daemon --stacktrace
+        run: gradle :TMessagesProj_App:assembleAfatRelease --no-daemon --stacktrace
 
       - name: Rename APK
         run: |
