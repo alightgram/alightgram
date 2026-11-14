@@ -365,22 +365,22 @@ void Handshake::processHandshakeResponse_resPQ(TLObject *message, int64_t messag
             if (serverPublicKeys.empty()) {
                 if (ConnectionsManager::getInstance(currentDatacenter->instanceNum).testBackend) {
                     serverPublicKeys.emplace_back("-----BEGIN RSA PUBLIC KEY-----\n"
-                                                  "MIIBCgKCAQEAoQO9Tja9Pa9eT8EDvgHy4lLkrjqLCugb1qnvUCA2mfskyn9/X514\n"
-                                                  "yFlzkd5oF6EDttM8WzHsDS2XRZ60nRbZ5jgyBa/KJ3BMET7AyXuPi7w1EP4XBrcO\n"
-                                                  "/gRrxydvCWrAjZub0r8PvFqOG9d4nYKBLq+xnQeonPX5uRrq6rqheSn47IW4QB55\n"
-                                                  "9yzwL3Pto+zuh/hk1y7yT4tW5goPmpqepKYHq6dy5CkvfxBqlUcEJjtEaVkqVLQe\n"
-                                                  "iu1HRqS5KhSMRvzBe1JxV2a934scTKs70J1bmumw8T7Hoya9XN4fGd9Rfnp1DZMb\n"
-                                                  "+fGXcrMmDSt6zhiAbWNu4JMKs5dRHuQKCQIDAQAB\n"
+                                                  "MIIBCgKCAQEA1EpPC9+2fgXo1iwehlyqP6NiHal+bLu6e+E54JALtSg+oRW2FuKw\n"
+                                                  "716831Y45EUtzL9UuvKaMjsYVxDSNGMaJbxtcy8IABUb+6cp4tHgoZeS17kbcTzc\n"
+                                                  "XWeWZobmQfWtnEVKuJeB/PWCW5L9EVhqpjJEt2RoWfK9jdT4UtHpTCJ03JfFg5an\n"
+                                                  "T5gxqz5iCF90SryDCIHdyl27nAT9bwJ1spZ0NrDhI2hbcFpmIbR7AA/YnBq81d8x\n"
+                                                  "OR8VbnOC4ojqKHkobHg3pyi/+zYNb3/LZqNvNncZCVHUAY9JjacSvoC+doDeITZE\n"
+                                                  "fJvKUF0Z2vw4nhl9TPNpwDhghg0gTaCwLQIDAQAB\n"
                                                   "-----END RSA PUBLIC KEY-----");
                     serverPublicKeysFingerprints.push_back(0xb25898df208d2603);
                 } else {
                     serverPublicKeys.emplace_back("-----BEGIN RSA PUBLIC KEY-----\n"
-                                                  "MIIBCgKCAQEAoQO9Tja9Pa9eT8EDvgHy4lLkrjqLCugb1qnvUCA2mfskyn9/X514\n"
-                                                  "yFlzkd5oF6EDttM8WzHsDS2XRZ60nRbZ5jgyBa/KJ3BMET7AyXuPi7w1EP4XBrcO\n"
-                                                  "/gRrxydvCWrAjZub0r8PvFqOG9d4nYKBLq+xnQeonPX5uRrq6rqheSn47IW4QB55\n"
-                                                  "9yzwL3Pto+zuh/hk1y7yT4tW5goPmpqepKYHq6dy5CkvfxBqlUcEJjtEaVkqVLQe\n"
-                                                  "iu1HRqS5KhSMRvzBe1JxV2a934scTKs70J1bmumw8T7Hoya9XN4fGd9Rfnp1DZMb\n"
-                                                  "+fGXcrMmDSt6zhiAbWNu4JMKs5dRHuQKCQIDAQAB\n"
+                                                  "MIIBCgKCAQEA1EpPC9+2fgXo1iwehlyqP6NiHal+bLu6e+E54JALtSg+oRW2FuKw\n"
+                                                  "716831Y45EUtzL9UuvKaMjsYVxDSNGMaJbxtcy8IABUb+6cp4tHgoZeS17kbcTzc\n"
+                                                  "XWeWZobmQfWtnEVKuJeB/PWCW5L9EVhqpjJEt2RoWfK9jdT4UtHpTCJ03JfFg5an\n"
+                                                  "T5gxqz5iCF90SryDCIHdyl27nAT9bwJ1spZ0NrDhI2hbcFpmIbR7AA/YnBq81d8x\n"
+                                                  "OR8VbnOC4ojqKHkobHg3pyi/+zYNb3/LZqNvNncZCVHUAY9JjacSvoC+doDeITZE\n"
+                                                  "fJvKUF0Z2vw4nhl9TPNpwDhghg0gTaCwLQIDAQAB\n"
                                                   "-----END RSA PUBLIC KEY-----");
                     serverPublicKeysFingerprints.push_back(0xd09d1d85de64fd85);
                 }
