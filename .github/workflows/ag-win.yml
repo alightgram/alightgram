@@ -94,15 +94,28 @@ jobs:
           restore-keys: ${{ runner.OS }}-x64-qt-
 
       - name: Free up disk space (pre-build).
-        uses: jlumbroso/free-disk-space@main
-        with:
-          android: true
-          dotnet: true
-          haskell: true
-          docker-images: true
-          large-packages: true
-          swap-storage: true
-          tool-cache: false
+        shell: pwsh
+        run: |
+          $targets = @(
+            "C:\Program Files\Android\AndroidSDK",
+            "$env:ANDROID_HOME",
+            "C:\Program Files\dotnet",
+            "C:\hostedtoolcache\windows\ghc",
+            "C:\hostedtoolcache\windows\julia",
+            "C:\hostedtoolcache\windows\php",
+            "C:\hostedtoolcache\windows\Ruby",
+            "C:\hostedtoolcache\windows\MySQL",
+            "C:\hostedtoolcache\windows\PostgreSQL",
+            "C:\hostedtoolcache\windows\mariaDB",
+            "C:\hostedtoolcache\windows\stack",
+            "C:\hostedtoolcache\windows\Miniconda",
+            "C:\hostedtoolcache\windows\PyPy"
+          )
+          foreach ($t in $targets) {
+            if (Test-Path $t) { Remove-Item -Recurse -Force $t -ErrorAction SilentlyContinue }
+          }
+          if (Get-Command docker -ErrorAction SilentlyContinue) { docker system prune -af 2>$null | Out-Null }
+          Write-Output ("C: free GB: " + [math]::Round((Get-PSDrive C).Free/1GB,1))
 
       - name: Libraries.
         run: |
