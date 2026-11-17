@@ -121,6 +121,20 @@ jobs:
         run: |
           %TBUILD%\%REPO_NAME%\Telegram\build\prepare\win.bat skip-release silent
 
+      - name: Ensure wallet_engine generated file (fork prepare quirk).
+        shell: pwsh
+        run: |
+          $expected = "$env:LibrariesPath\tdesktop_rust\out\src\wallet_engine\wallet_engine.cpp"
+          if (Test-Path $expected) { Write-Output "wallet_engine.cpp present"; exit 0 }
+          Write-Output "expected file missing, searching..."
+          $found = Get-ChildItem "$env:LibrariesPath\tdesktop_rust" -Recurse -Filter "wallet_engine.cpp" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $found) { $found = Get-ChildItem "$env:LibrariesPath" -Recurse -Filter "wallet_engine.cpp" -ErrorAction SilentlyContinue | Select-Object -First 1 }
+          if (-not $found) { Write-Output "ERROR: wallet_engine.cpp not found anywhere"; exit 1 }
+          Write-Output "found at $($found.FullName)"
+          New-Item -ItemType Directory -Force -Path (Split-Path $expected) | Out-Null
+          Copy-Item $found.FullName $expected -Force
+          Write-Output "copied into place"
+
       - name: Free up some disk space.
         shell: bash
         run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete
