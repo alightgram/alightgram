@@ -26,6 +26,16 @@ jobs:
           echo "Using Xcode $XCODE_VERSION"
           sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer
 
+      - name: Ensure pkg-config reachable via restricted PATH.
+        run: |
+          brew install pkg-config || true
+          sudo mkdir -p /usr/local/bin
+          for tool in pkg-config; do
+            src="$(command -v $tool || echo /opt/homebrew/bin/$tool)"
+            sudo ln -sf "$src" "/usr/local/bin/$tool"
+          done
+          /usr/local/bin/pkg-config --version
+
       - name: Create canonical source directory
         run: |
           set -x
