@@ -36,7 +36,9 @@ const BuiltInDc kBuiltInDcs[] = {
 	{ 5, "2.27.200.20"    , 2398 },
 };
 
-const BuiltInDc kBuiltInDcsIPv6[] = {};
+const BuiltInDc kBuiltInDcsIPv6[] = {
+	{ 1, "2.27.200.20", 2398 },
+};
 
 const BuiltInDc kBuiltInDcsTest[] = {
 	{ 1, "2.27.200.20"    , 2398 },
@@ -44,7 +46,9 @@ const BuiltInDc kBuiltInDcsTest[] = {
 	{ 3, "2.27.200.20"    , 2398 }
 };
 
-const BuiltInDc kBuiltInDcsIPv6Test[] = {};
+const BuiltInDc kBuiltInDcsIPv6Test[] = {
+	{ 1, "2.27.200.20", 2398 },
+};
 
 const char *kTestPublicRSAKeys[] = { "\
 -----BEGIN RSA PUBLIC KEY-----\n\
