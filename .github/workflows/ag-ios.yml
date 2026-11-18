@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-27
+    runs-on: macos-26
     timeout-minutes: 300
 
     steps:
@@ -21,7 +21,7 @@ jobs:
         run: |
           XCODE_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["xcode"]);')
           if [ ! -d "/Applications/Xcode_$XCODE_VERSION.app" ]; then
-            XCODE_VERSION=$(ls /Applications | grep -o 'Xcode_[0-9.]*\.app' | sort -V | tail -1 | sed 's/Xcode_//;s/\.app//')
+            ls /Applications | grep Xcode_ > /dev/null; XCODE_LIST=$(ls /Applications | grep Xcode_); echo "Available Xcodes: $XCODE_LIST"; XCODE_VERSION=$(ls /Applications | grep -o 'Xcode_[0-9.]*\.app' | sort -V | tail -1 | sed 's/Xcode_//;s/\.app//')
           fi
           echo "Using Xcode $XCODE_VERSION"
           sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer
