@@ -57,13 +57,18 @@ jobs:
       - name: Install ATL for pinned MSVC toolset (breakpad needs it).
         shell: pwsh
         run: |
-          $exe = Join-Path $env:RUNNER_TEMP 'vs_buildtools.exe'
-          Invoke-WebRequest -Uri https://aka.ms/vs/18/stable/vs_buildtools.exe -OutFile $exe
-          $p = Start-Process -FilePath $exe -Wait -PassThru -ArgumentList `
-            '--quiet','--wait','--norestart','--nocache', `
-            '--add','Microsoft.VisualStudio.Component.VC.14.44.17.14.ATL'
-          Remove-Item $exe -Force -ErrorAction SilentlyContinue
+          $vsInstaller = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe'
+          if (-not (Test-Path $vsInstaller)) { $vsInstaller = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe' }
+          $root = 'C:\Program Files\Microsoft Visual Studio'
+          $major = (Get-ChildItem $root -Directory | Sort-Object Name -Descending | Select-Object -First 1).FullName
+          $installPath = (Get-ChildItem $major -Directory | Select-Object -First 1).FullName
+          Write-Output "Modifying VS instance at $installPath"
+          $p = Start-Process -FilePath $vsInstaller -Wait -PassThru -ArgumentList `
+            'modify','--installPath',"`"$installPath`"", `
+            '--add','Microsoft.VisualStudio.Component.VC.14.44.17.14.ATL', `
+            '--quiet','--norestart'
           if ($p.ExitCode -ne 0 -and $p.ExitCode -ne 3010) { exit $p.ExitCode }
+          Write-Output 'ATL installed'
 
       - uses: Eden-CI/msvc-dev-cmd@master
         name: Native Tools Command Prompt.
